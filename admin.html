@@ -2,22 +2,46 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>لوحة التحكم</title>
+
 <style>
-body{font-family:tahoma;padding:20px}
-input,button,textarea{width:100%;margin:5px 0;padding:8px}
+body{
+  font-family:Tahoma;
+  background:#f4f8f6;
+  padding:20px;
+}
+.box{
+  max-width:400px;
+  margin:auto;
+}
+input,button,textarea{
+  width:100%;
+  margin:8px 0;
+  padding:10px;
+  font-size:15px;
+}
+button{
+  background:#0e6848;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+}
 .hidden{display:none}
+textarea{height:200px}
 </style>
 </head>
+
 <body>
 
-<div id="login">
+<div class="box" id="loginBox">
   <h3>🔐 دخول الأدمن</h3>
-  <input id="pass" type="password">
-  <button onclick="login()">دخول</button>
+  <input type="password" id="password" placeholder="كلمة السر">
+  <button onclick="doLogin()">دخول</button>
+  <p id="error" style="color:red;display:none">❌ كلمة السر غير صحيحة</p>
 </div>
 
-<div id="panel" class="hidden">
+<div class="box hidden" id="adminBox">
   <h3>📻 الإذاعة</h3>
   <input id="radioName" placeholder="اسم الإذاعة">
   <input id="radioUrl" placeholder="رابط الإذاعة">
@@ -25,39 +49,56 @@ input,button,textarea{width:100%;margin:5px 0;padding:8px}
   <h3>📡 قناة المجد</h3>
   <input id="majdUrl" placeholder="رابط القناة">
 
-  <h3>📨 تليجرام</h3>
+  <h3>📨 قناة التليجرام</h3>
   <input id="tgUrl" placeholder="رابط التليجرام">
 
-  <h3>🎤 القرّاء</h3>
-  <input id="sheikhName" placeholder="اسم الشيخ">
+  <h3>🎤 إضافة قارئ</h3>
+  <input id="sheikhName" placeholder="اسم القارئ">
   <input id="sheikhUrl" placeholder="رابط الصوت">
-  <button onclick="addSheikh()">إضافة</button>
+  <button onclick="addSheikh()">➕ إضافة</button>
 
-  <textarea id="out" rows="12"></textarea>
+  <h3>📄 config.json</h3>
+  <textarea id="output"></textarea>
 </div>
 
 <script>
-let sheikhs=[];
+const ADMIN_PASSWORD = "Sar7an_010";
+let sheikhs = [];
 
-function login(){
-  if(pass.value==="Sar7an_010"){
-    login.style.display="none";
-    panel.classList.remove("hidden");
-  }else alert("خطأ");
+function doLogin(){
+  const pass = document.getElementById("password").value;
+  if(pass === ADMIN_PASSWORD){
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("adminBox").classList.remove("hidden");
+  }else{
+    document.getElementById("error").style.display="block";
+  }
 }
 
 function addSheikh(){
-  sheikhs.push({name:sheikhName.value,url:sheikhUrl.value});
-  generate();
+  sheikhs.push({
+    name: sheikhName.value,
+    url: sheikhUrl.value
+  });
+  generateConfig();
 }
 
-function generate(){
-  out.value=JSON.stringify({
-    radio:{name:radioName.value,url:radioUrl.value},
-    majd:{name:"قناة المجد",url:majdUrl.value},
-    telegram:{url:tgUrl.value},
-    sheikhs:sheikhs
-  },null,2);
+function generateConfig(){
+  const config = {
+    radio:{
+      name: radioName.value,
+      url: radioUrl.value
+    },
+    majd:{
+      name: "قناة المجد",
+      url: majdUrl.value
+    },
+    telegram:{
+      url: tgUrl.value
+    },
+    sheikhs: sheikhs
+  };
+  output.value = JSON.stringify(config, null, 2);
 }
 </script>
 
