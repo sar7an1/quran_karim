@@ -19,7 +19,6 @@ content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable
   --sidebar:#0f3d2e;
 }
 
-/* ===== Dark Mode ===== */
 body.dark{
   --bg:#020617;
   --white:#020617;
@@ -48,12 +47,32 @@ body{
 .header-icons{
   display:flex;
   gap:10px;
+  align-items:center;
   margin-inline:10px;
 }
 
+/* 🌙 */
 .icon-btn{
   cursor:pointer;
   font-size:20px;
+}
+
+/* 📻 Radio Box */
+.radio-box{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border-radius:8px;
+  background:var(--green);
+  color:#fff;
+  font-size:14px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.radio-box:hover{
+  background:var(--green-dark);
 }
 
 /* ===== Search ===== */
@@ -66,10 +85,9 @@ body{
   padding:8px 10px;
   border-radius:6px;
   border:1px solid #555;
-  background:#fff;
 }
 
-/* ===== Telegram Name Box ===== */
+/* ===== Telegram Name ===== */
 .header-user a{
   display:flex;
   align-items:center;
@@ -80,11 +98,6 @@ body{
   color:#fff;
   font-weight:bold;
   text-decoration:none;
-  transition:.2s;
-}
-
-.header-user a:hover{
-  background:#0284c7;
 }
 
 .header-user img{
@@ -141,17 +154,14 @@ body{
   padding:14px;
   margin-bottom:10px;
   cursor:pointer;
-  transition:.2s;
 }
 
 .reader:hover{
   background:#e9f7f1;
-  color:#000;
 }
 
 body.dark .reader:hover{
   background:#1f2937;
-  color:#fff;
 }
 
 /* ===== Player ===== */
@@ -179,10 +189,6 @@ body.dark .reader:hover{
   cursor:pointer;
 }
 
-.player button:hover{
-  background:var(--green-dark);
-}
-
 /* ===== Responsive ===== */
 @media(max-width:768px){
   .sidebar{display:none}
@@ -200,8 +206,13 @@ body.dark .reader:hover{
   <div class="header-space"></div>
 
   <div class="header-icons">
+
     <span class="icon-btn" onclick="toggleDark()">🌙</span>
-    <span class="icon-btn">📻</span>
+
+    <div class="radio-box">
+      📻 <span>الراديو المباشر</span>
+    </div>
+
   </div>
 
   <div class="header-search">
