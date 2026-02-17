@@ -21,7 +21,7 @@ content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable
 
 /* ===== Dark Mode ===== */
 body.dark{
-  --bg:#0f172a;
+  --bg:#020617;
   --white:#020617;
   --dark:#e5e7eb;
   --sidebar:#020617;
@@ -38,17 +38,19 @@ body{
 .header{
   display:flex;
   align-items:center;
-  gap:10px;
   padding:10px 15px;
   background:var(--white);
-  border-bottom:1px solid #ddd;
+  border-bottom:1px solid #ccc;
 }
 
-.header-left{
+.header-space{
+  flex:1;
+}
+
+.header-icons{
   display:flex;
-  align-items:center;
   gap:12px;
-  font-size:18px;
+  margin-inline:10px;
 }
 
 .icon-btn{
@@ -56,20 +58,22 @@ body{
   font-size:20px;
 }
 
-.search{
-  flex:1;
+.header-search{
+  width:360px;
 }
 
-.search input{
+.header-search input{
   width:100%;
-  padding:10px;
+  padding:8px 10px;
   border-radius:6px;
-  border:1px solid #ccc;
+  border:1px solid #bbb;
+  font-size:14px;
 }
 
-.header-right{
+.header-user{
   font-weight:bold;
   color:var(--green);
+  margin-inline:10px;
 }
 
 /* ===== Layout ===== */
@@ -92,12 +96,12 @@ body{
   color:#fff;
   text-decoration:none;
   border-radius:6px;
-  margin-bottom:5px;
+  margin-bottom:6px;
   font-size:14px;
 }
 
 .sidebar a:hover{
-  background:rgba(255,255,255,.1);
+  background:rgba(255,255,255,.12);
 }
 
 /* ===== Content ===== */
@@ -130,7 +134,7 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:15px;
+  gap:18px;
   padding:10px;
 }
 
@@ -138,7 +142,8 @@ body{
   background:var(--green);
   border:none;
   color:#fff;
-  padding:8px 14px;
+  width:44px;
+  height:44px;
   border-radius:50%;
   cursor:pointer;
   font-size:16px;
@@ -155,6 +160,8 @@ body{
 /* ===== Responsive ===== */
 @media(max-width:768px){
   .sidebar{display:none}
+  .header-search{width:100%}
+  .header-space{display:none}
 }
 </style>
 </head>
@@ -163,16 +170,24 @@ body{
 
 <!-- ===== Header ===== -->
 <div class="header">
-  <div class="header-left">
-    <span class="icon-btn">📻</span>
+
+  <div class="header-space"></div>
+
+  <div class="header-icons">
     <span class="icon-btn" onclick="toggleDark()">🌙</span>
+    <span class="icon-btn">📻</span>
   </div>
 
-  <div class="search">
+  <div class="header-search">
     <input type="text" placeholder="بحث باسم القارئ">
   </div>
 
-  <div class="header-right">sar7an_1</div>
+  <div class="header-user">
+    sar7an_1
+  </div>
+
+  <div class="header-space"></div>
+
 </div>
 
 <!-- ===== Layout ===== -->
