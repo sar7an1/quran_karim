@@ -12,12 +12,12 @@ body{
   padding:20px;
 }
 .box{
-  max-width:400px;
+  max-width:450px;
   margin:auto;
 }
 input,button,textarea{
   width:100%;
-  margin:8px 0;
+  margin:6px 0;
   padding:10px;
   font-size:15px;
 }
@@ -26,9 +26,38 @@ button{
   color:#fff;
   border:none;
   border-radius:6px;
+  cursor:pointer;
+}
+button.small{
+  width:auto;
+  padding:5px 10px;
+  font-size:13px;
+  margin-left:5px;
 }
 .hidden{display:none}
-textarea{height:200px}
+textarea{
+  height:220px;
+  direction:ltr;
+}
+.list{
+  background:#fff;
+  padding:10px;
+  border-radius:8px;
+}
+.item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #ddd;
+  padding:5px 0;
+}
+.item:last-child{border-bottom:none}
+.actions button{
+  background:#888;
+}
+.actions button.delete{
+  background:#c0392b;
+}
 </style>
 </head>
 
@@ -42,55 +71,105 @@ textarea{height:200px}
 </div>
 
 <div class="box hidden" id="adminBox">
+
   <h3>📻 الإذاعة</h3>
   <input id="radioName" placeholder="اسم الإذاعة">
   <input id="radioUrl" placeholder="رابط الإذاعة">
 
   <h3>📡 قناة المجد</h3>
-  <input id="majdUrl" placeholder="رابط القناة">
+  <input id="majdUrl" placeholder="رابط قناة المجد">
 
   <h3>📨 قناة التليجرام</h3>
-  <input id="tgUrl" placeholder="رابط التليجرام">
+  <input id="tgUrl" placeholder="رابط قناة التليجرام">
 
-  <h3>🎤 إضافة قارئ</h3>
+  <h3>🎤 إضافة / تعديل قارئ</h3>
   <input id="sheikhName" placeholder="اسم القارئ">
   <input id="sheikhUrl" placeholder="رابط الصوت">
-  <button onclick="addSheikh()">➕ إضافة</button>
+  <button onclick="saveSheikh()">💾 حفظ</button>
+
+  <h3>📋 قائمة القرّاء</h3>
+  <div class="list" id="sheikhList"></div>
 
   <h3>📄 config.json</h3>
-  <textarea id="output"></textarea>
+  <textarea id="output" placeholder="هنا يظهر config.json تلقائي"></textarea>
+
 </div>
 
 <script>
 const ADMIN_PASSWORD = "Sar7an_010";
 let sheikhs = [];
+let editIndex = null;
 
 function doLogin(){
-  const pass = document.getElementById("password").value;
+  const pass = password.value;
   if(pass === ADMIN_PASSWORD){
-    document.getElementById("loginBox").classList.add("hidden");
-    document.getElementById("adminBox").classList.remove("hidden");
+    loginBox.classList.add("hidden");
+    adminBox.classList.remove("hidden");
   }else{
-    document.getElementById("error").style.display="block";
+    error.style.display="block";
   }
 }
 
-function addSheikh(){
-  sheikhs.push({
-    name: sheikhName.value,
-    url: sheikhUrl.value
-  });
+function saveSheikh(){
+  const name = sheikhName.value.trim();
+  const url  = sheikhUrl.value.trim();
+
+  if(!name || !url){
+    alert("من فضلك اكتب اسم القارئ ورابط الصوت");
+    return;
+  }
+
+  if(editIndex === null){
+    sheikhs.push({name,url});
+  }else{
+    sheikhs[editIndex] = {name,url};
+    editIndex = null;
+  }
+
+  sheikhName.value = "";
+  sheikhUrl.value = "";
+
+  renderList();
   generateConfig();
+}
+
+function editSheikh(i){
+  sheikhName.value = sheikhs[i].name;
+  sheikhUrl.value  = sheikhs[i].url;
+  editIndex = i;
+}
+
+function deleteSheikh(i){
+  if(confirm("هل تريد حذف القارئ؟")){
+    sheikhs.splice(i,1);
+    renderList();
+    generateConfig();
+  }
+}
+
+function renderList(){
+  sheikhList.innerHTML = "";
+  sheikhs.forEach((s,i)=>{
+    sheikhList.innerHTML += `
+      <div class="item">
+        <span>${s.name}</span>
+        <div class="actions">
+          <button class="small" onclick="editSheikh(${i})">✏️</button>
+          <button class="small delete" onclick="deleteSheikh(${i})">🗑️</button>
+        </div>
+      </div>
+    `;
+  });
 }
 
 function generateConfig(){
   const config = {
     radio:{
       name: radioName.value,
-      url: radioUrl.value
+      url:  radioUrl.value
     },
     majd:{
-      name: "قناة المجد",
+      name:"قناة المجد",
       url: majdUrl.value
     },
     telegram:{
@@ -98,7 +177,8 @@ function generateConfig(){
     },
     sheikhs: sheikhs
   };
-  output.value = JSON.stringify(config, null, 2);
+
+  output.value = JSON.stringify(config,null,2);
 }
 </script>
 
