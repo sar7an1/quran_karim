@@ -40,15 +40,14 @@ body{
   align-items:center;
   padding:10px 15px;
   background:var(--white);
-  border-bottom:1px solid #ccc;
+  border-bottom:1px solid #333;
 }
 
 .header-space{flex:1}
 
 .header-icons{
   display:flex;
-  align-items:center;
-  gap:12px;
+  gap:10px;
   margin-inline:10px;
 }
 
@@ -57,49 +56,40 @@ body{
   font-size:20px;
 }
 
-/* Radio box */
-.radio-box{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  padding:6px 10px;
-  border:1px solid var(--green);
-  border-radius:6px;
-  cursor:pointer;
-  font-size:13px;
-  color:var(--green);
-  white-space:nowrap;
+/* ===== Search ===== */
+.header-search{
+  width:340px;
 }
-
-.radio-box:hover{
-  background:var(--green);
-  color:#fff;
-}
-
-/* Dark radio */
-body.dark .radio-box{
-  border-color:#4ade80;
-  color:#4ade80;
-}
-body.dark .radio-box:hover{
-  background:#4ade80;
-  color:#000;
-}
-
-.header-search{width:360px}
 
 .header-search input{
   width:100%;
   padding:8px 10px;
   border-radius:6px;
-  border:1px solid #bbb;
-  font-size:14px;
+  border:1px solid #555;
+  background:#fff;
 }
 
-.header-user{
+/* ===== Telegram Name Box ===== */
+.header-user a{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 12px;
+  border-radius:8px;
+  background:#0ea5e9;
+  color:#fff;
   font-weight:bold;
-  color:var(--green);
-  margin-inline:10px;
+  text-decoration:none;
+  transition:.2s;
+}
+
+.header-user a:hover{
+  background:#0284c7;
+}
+
+.header-user img{
+  width:22px;
+  height:22px;
 }
 
 /* ===== Layout ===== */
@@ -123,11 +113,20 @@ body.dark .radio-box:hover{
   text-decoration:none;
   border-radius:6px;
   margin-bottom:6px;
-  font-size:14px;
 }
 
 .sidebar a:hover{
   background:rgba(255,255,255,.12);
+}
+
+/* ===== Ad Box ===== */
+.ad-box{
+  border:2px dashed #22c55e;
+  border-radius:12px;
+  padding:30px;
+  text-align:center;
+  margin-bottom:20px;
+  color:#22c55e;
 }
 
 /* ===== Content ===== */
@@ -136,34 +135,6 @@ body.dark .radio-box:hover{
   padding:20px;
 }
 
-/* ===== Ads ===== */
-.ads-box{
-  background:var(--white);
-  border:2px dashed var(--green);
-  border-radius:10px;
-  padding:20px;
-  margin-bottom:20px;
-  text-align:center;
-}
-
-.ads-box img,
-.ads-box video{
-  max-width:100%;
-  border-radius:8px;
-}
-
-.ads-placeholder{
-  color:#9ca3af;
-  font-size:16px;
-  padding:40px 10px;
-}
-
-body.dark .ads-box{
-  background:#020617;
-  border-color:#4ade80;
-}
-
-/* Readers */
 .reader{
   background:var(--white);
   border-radius:6px;
@@ -190,7 +161,7 @@ body.dark .reader:hover{
   left:0;
   right:0;
   background:var(--white);
-  border-top:1px solid #ccc;
+  border-top:1px solid #333;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -206,14 +177,11 @@ body.dark .reader:hover{
   height:44px;
   border-radius:50%;
   cursor:pointer;
-  font-size:16px;
 }
 
 .player button:hover{
   background:var(--green-dark);
 }
-
-.player span{font-size:14px}
 
 /* ===== Responsive ===== */
 @media(max-width:768px){
@@ -233,18 +201,19 @@ body.dark .reader:hover{
 
   <div class="header-icons">
     <span class="icon-btn" onclick="toggleDark()">🌙</span>
-
-    <div class="radio-box">
-      <span>📻</span>
-      <span>الراديو المباشر</span>
-    </div>
+    <span class="icon-btn">📻</span>
   </div>
 
   <div class="header-search">
     <input type="text" placeholder="بحث باسم القارئ">
   </div>
 
-  <div class="header-user">sar7an_1</div>
+  <div class="header-user">
+    <a href="https://web.telegram.org/a/#602487074" target="_blank">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg">
+      sar7an_1
+    </a>
+  </div>
 
   <div class="header-space"></div>
 
@@ -253,9 +222,8 @@ body.dark .reader:hover{
 <!-- ===== Layout ===== -->
 <div class="layout">
 
-  <!-- Sidebar -->
   <div class="sidebar">
-    <a href="#" onclick="showAds()">🏠 الرئيسية</a>
+    <a href="#">🏠 الرئيسية</a>
     <a href="#">❤️ المفضلة</a>
     <a href="#">📻 البث المباشر</a>
     <a href="#">📖 تصفح القرآن</a>
@@ -267,14 +235,10 @@ body.dark .reader:hover{
     <a href="#">📢 الإذاعة</a>
   </div>
 
-  <!-- Content -->
   <div class="content">
 
-    <!-- Ads -->
-    <div id="adsBox" class="ads-box">
-      <div class="ads-placeholder">
-        🚧 إعلان تحت الإنشاء
-      </div>
+    <div class="ad-box">
+      📢 إعلان تحت الإنشاء
     </div>
 
     <div class="reader">الشيخ ماهر المعيقلي</div>
@@ -297,12 +261,6 @@ body.dark .reader:hover{
 <script>
 function toggleDark(){
   document.body.classList.toggle("dark");
-}
-
-function showAds(){
-  document.getElementById("adsBox").scrollIntoView({
-    behavior:"smooth"
-  });
 }
 </script>
 
