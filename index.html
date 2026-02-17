@@ -1,11 +1,149 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>قران كريم</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>قران كريم</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Tahoma, Arial;
+  background:#f6f9f7;
+  color:#1b3a2f;
+}
+header{
+  background:#0e6848;
+  color:#fff;
+  padding:15px;
+  text-align:center;
+}
+nav{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  background:#e7f3ee;
+  padding:10px;
+  flex-wrap:wrap;
+}
+nav button{
+  background:#0e6848;
+  color:white;
+  border:none;
+  padding:8px 14px;
+  border-radius:6px;
+  cursor:pointer;
+}
+section{
+  display:none;
+  padding:20px;
+}
+section.active{
+  display:block;
+}
+.card{
+  background:white;
+  padding:15px;
+  border-radius:10px;
+  margin-bottom:15px;
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
+}
+audio{
+  width:100%;
+  margin-top:10px;
+}
+footer{
+  text-align:center;
+  padding:10px;
+  font-size:13px;
+  color:#555;
+}
+</style>
 </head>
-<body style="font-family:tahoma;text-align:center;padding:40px">
+
+<body>
+
+<header>
   <h1>📖 قران كريم</h1>
-  <p>الموقع شغال ✔️</p>
+  <p>إذاعة القرآن – الرقية الشرعية – كبار القراء</p>
+</header>
+
+<nav>
+  <button onclick="showSection('radio')">📻 الإذاعة</button>
+  <button onclick="showSection('ruqya')">🕊️ الرقية</button>
+  <button onclick="showSection('sheikh')">🎧 الشيوخ</button>
+</nav>
+
+<!-- إذاعة القرآن -->
+<section id="radio" class="active">
+  <div class="card">
+    <h2>📻 إذاعة القرآن الكريم</h2>
+    <audio controls>
+      <source src="https://n0b.radiojar.com/8s5u5tpdtwzuv" type="audio/mpeg">
+    </audio>
+  </div>
+</section>
+
+<!-- الرقية الشرعية -->
+<section id="ruqya">
+  <div class="card">
+    <h2>🕊️ رقية العين والحسد</h2>
+    <audio controls>
+      <source src="https://server8.mp3quran.net/ruqya/1.mp3">
+    </audio>
+  </div>
+
+  <div class="card">
+    <h2>🕊️ رقية السحر</h2>
+    <audio controls>
+      <source src="https://server8.mp3quran.net/ruqya/2.mp3">
+    </audio>
+  </div>
+
+  <div class="card">
+    <h2>🕊️ رقية الهم والضيق</h2>
+    <audio controls>
+      <source src="https://server8.mp3quran.net/ruqya/3.mp3">
+    </audio>
+  </div>
+</section>
+
+<!-- الشيوخ -->
+<section id="sheikh">
+  <div class="card">
+    <h2>🎧 الشيخ عبدالباسط</h2>
+    <audio controls>
+      <source src="https://server7.mp3quran.net/basit/001.mp3">
+    </audio>
+  </div>
+
+  <div class="card">
+    <h2>🎧 الشيخ الحصري</h2>
+    <audio controls>
+      <source src="https://server13.mp3quran.net/husr/001.mp3">
+    </audio>
+  </div>
+
+  <div class="card">
+    <h2>🎧 الشيخ المنشاوي</h2>
+    <audio controls>
+      <source src="https://server10.mp3quran.net/minsh/001.mp3">
+    </audio>
+  </div>
+</section>
+
+<footer>
+  © قران كريم – صدقة جارية
+</footer>
+
+<script>
+function showSection(id){
+  document.querySelectorAll('section').forEach(sec=>{
+    sec.classList.remove('active');
+  });
+  document.getElementById(id).classList.add('active');
+}
+</script>
+
 </body>
 </html>
