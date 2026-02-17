@@ -6,15 +6,27 @@
 <title>قران كريم</title>
 
 <style>
+:root{
+  --bg:#f6f9f7;
+  --card:#ffffff;
+  --main:#0e6848;
+  --text:#1b3a2f;
+}
+body.dark{
+  --bg:#0f1f1a;
+  --card:#162d25;
+  --text:#e7f3ee;
+}
 body{
   margin:0;
   font-family:Tahoma, Arial;
-  background:#f6f9f7;
-  color:#1b3a2f;
+  background:var(--bg);
+  color:var(--text);
+  transition:.3s;
 }
 header{
-  background:#0e6848;
-  color:#fff;
+  background:var(--main);
+  color:white;
   padding:15px;
   text-align:center;
 }
@@ -27,36 +39,38 @@ nav{
   flex-wrap:wrap;
 }
 nav button{
-  background:#0e6848;
+  background:var(--main);
   color:white;
   border:none;
   padding:8px 14px;
   border-radius:6px;
   cursor:pointer;
 }
-section{
-  display:none;
-  padding:20px;
-}
-section.active{
-  display:block;
-}
+section{display:none;padding:20px}
+section.active{display:block}
 .card{
-  background:white;
+  background:var(--card);
   padding:15px;
-  border-radius:10px;
+  border-radius:12px;
   margin-bottom:15px;
-  box-shadow:0 4px 10px rgba(0,0,0,.08);
+  box-shadow:0 4px 12px rgba(0,0,0,.1);
 }
-audio{
-  width:100%;
-  margin-top:10px;
+audio{width:100%}
+.controls{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+.now{
+  font-size:14px;
+  font-weight:bold;
 }
 footer{
   text-align:center;
   padding:10px;
   font-size:13px;
-  color:#555;
+  opacity:.8;
 }
 </style>
 </head>
@@ -72,61 +86,54 @@ footer{
   <button onclick="showSection('radio')">📻 الإذاعة</button>
   <button onclick="showSection('ruqya')">🕊️ الرقية</button>
   <button onclick="showSection('sheikh')">🎧 الشيوخ</button>
+  <button onclick="stopAll()">⏹️ إيقاف الكل</button>
+  <button onclick="toggleDark()">🌙</button>
 </nav>
 
-<!-- إذاعة القرآن -->
+<div class="controls">
+  <div class="now" id="nowPlaying">لا يوجد تشغيل</div>
+</div>
+
 <section id="radio" class="active">
   <div class="card">
-    <h2>📻 إذاعة القرآن الكريم</h2>
-    <audio controls>
+    <h3>📻 إذاعة القرآن الكريم</h3>
+    <audio data-name="إذاعة القرآن">
       <source src="https://n0b.radiojar.com/8s5u5tpdtwzuv" type="audio/mpeg">
     </audio>
   </div>
 </section>
 
-<!-- الرقية الشرعية -->
 <section id="ruqya">
   <div class="card">
-    <h2>🕊️ رقية العين والحسد</h2>
-    <audio controls>
+    <h3>🕊️ رقية العين والحسد</h3>
+    <audio data-name="رقية العين">
       <source src="https://server8.mp3quran.net/ruqya/1.mp3">
     </audio>
   </div>
-
   <div class="card">
-    <h2>🕊️ رقية السحر</h2>
-    <audio controls>
+    <h3>🕊️ رقية السحر</h3>
+    <audio data-name="رقية السحر">
       <source src="https://server8.mp3quran.net/ruqya/2.mp3">
-    </audio>
-  </div>
-
-  <div class="card">
-    <h2>🕊️ رقية الهم والضيق</h2>
-    <audio controls>
-      <source src="https://server8.mp3quran.net/ruqya/3.mp3">
     </audio>
   </div>
 </section>
 
-<!-- الشيوخ -->
 <section id="sheikh">
   <div class="card">
-    <h2>🎧 الشيخ عبدالباسط</h2>
-    <audio controls>
+    <h3>🎧 الشيخ عبدالباسط</h3>
+    <audio data-name="الشيخ عبدالباسط">
       <source src="https://server7.mp3quran.net/basit/001.mp3">
     </audio>
   </div>
-
   <div class="card">
-    <h2>🎧 الشيخ الحصري</h2>
-    <audio controls>
+    <h3>🎧 الشيخ الحصري</h3>
+    <audio data-name="الشيخ الحصري">
       <source src="https://server13.mp3quran.net/husr/001.mp3">
     </audio>
   </div>
-
   <div class="card">
-    <h2>🎧 الشيخ المنشاوي</h2>
-    <audio controls>
+    <h3>🎧 الشيخ المنشاوي</h3>
+    <audio data-name="الشيخ المنشاوي">
       <source src="https://server10.mp3quran.net/minsh/001.mp3">
     </audio>
   </div>
@@ -138,10 +145,40 @@ footer{
 
 <script>
 function showSection(id){
-  document.querySelectorAll('section').forEach(sec=>{
-    sec.classList.remove('active');
-  });
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+}
+
+const audios = document.querySelectorAll("audio");
+const now = document.getElementById("nowPlaying");
+
+audios.forEach(a=>{
+  a.addEventListener("play",()=>{
+    audios.forEach(o=>{
+      if(o!==a){
+        o.pause();
+        o.currentTime=0;
+      }
+    });
+    now.textContent = "🔊 يتم التشغيل: " + a.dataset.name;
+  });
+  a.addEventListener("pause",()=>{
+    if([...audios].every(x=>x.paused)){
+      now.textContent="لا يوجد تشغيل";
+    }
+  });
+});
+
+function stopAll(){
+  audios.forEach(a=>{
+    a.pause();
+    a.currentTime=0;
+  });
+  now.textContent="تم إيقاف الكل";
+}
+
+function toggleDark(){
+  document.body.classList.toggle("dark");
 }
 </script>
 
