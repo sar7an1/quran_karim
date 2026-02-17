@@ -8,23 +8,27 @@ content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable
 <title>المكتبة الصوتية للقرآن الكريم</title>
 
 <style>
-/* ===== الخط الرئيسي ===== */
+/* ===== الخطوط ===== */
 @font-face{
   font-family:"KAF";
   src:url("alfont_com_KAF-GULZAR-PC.otf") format("opentype");
-  font-weight:normal;
-  font-style:normal;
+}
+@font-face{
+  font-family:"ZAIN";
+  src:url("alfont_com_Zain-PC-VF.ttf") format("truetype");
 }
 
-/* ===== Reset ===== */
+/* ===== Reset + الخط الافتراضي ===== */
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family:"KAF", Tahoma, Arial;
+  font-family:var(--main-font);
 }
 
+/* ===== Variables ===== */
 :root{
+  --main-font:"KAF";
   --green:#1f8f5f;
   --green-dark:#15724a;
   --bg:#f4f6f8;
@@ -61,12 +65,16 @@ body{
   display:flex;
   gap:10px;
   align-items:center;
-  margin-inline:10px;
 }
 
+/* ===== Icons ===== */
 .icon-btn{
   cursor:pointer;
-  font-size:20px;
+  font-size:18px;
+  background:#111827;
+  color:#fff;
+  padding:6px 10px;
+  border-radius:8px;
 }
 
 /* ===== Radio ===== */
@@ -80,7 +88,6 @@ body{
   color:#fff;
   cursor:pointer;
 }
-
 .radio-box:hover{
   background:var(--green-dark);
 }
@@ -89,16 +96,14 @@ body{
 .header-search{
   width:340px;
 }
-
 .header-search input{
   width:100%;
   padding:8px 12px;
   border-radius:6px;
   border:1px solid #555;
-  font-size:14px;
 }
 
-/* ===== Telegram Name ===== */
+/* ===== Telegram ===== */
 .header-user a{
   display:flex;
   align-items:center;
@@ -110,10 +115,7 @@ body{
   text-decoration:none;
   font-weight:bold;
 }
-
-.header-user img{
-  width:22px;
-}
+.header-user img{width:22px}
 
 /* ===== Layout ===== */
 .layout{
@@ -128,7 +130,6 @@ body{
   color:#fff;
   padding:15px;
 }
-
 .sidebar a{
   display:block;
   padding:10px;
@@ -137,7 +138,6 @@ body{
   border-radius:6px;
   margin-bottom:6px;
 }
-
 .sidebar a:hover{
   background:rgba(255,255,255,.12);
 }
@@ -158,20 +158,17 @@ body{
   flex:1;
   padding:20px;
 }
-
 .reader{
   background:var(--white);
   border-radius:8px;
   padding:16px;
   margin-bottom:12px;
   cursor:pointer;
-  font-size:18px;
+  font-size:20px;
 }
-
 .reader:hover{
   background:#e9f7f1;
 }
-
 body.dark .reader:hover{
   background:#1f2937;
 }
@@ -190,7 +187,6 @@ body.dark .reader:hover{
   gap:18px;
   padding:10px;
 }
-
 .player button{
   background:var(--green);
   border:none;
@@ -212,12 +208,14 @@ body.dark .reader:hover{
 
 <body>
 
+<!-- ===== Header ===== -->
 <div class="header">
 
   <div class="header-space"></div>
 
   <div class="header-icons">
-    <span class="icon-btn" onclick="toggleDark()">🌙</span>
+    <div class="icon-btn" onclick="toggleFont()">Aa</div>
+    <div class="icon-btn" onclick="toggleDark()">🌙</div>
 
     <div class="radio-box">
       📻 الراديو المباشر
@@ -274,6 +272,12 @@ body.dark .reader:hover{
 <script>
 function toggleDark(){
   document.body.classList.toggle("dark");
+}
+
+function toggleFont(){
+  const root = document.documentElement;
+  const current = getComputedStyle(root).getPropertyValue("--main-font").trim();
+  root.style.setProperty("--main-font", current === "KAF" ? "ZAIN" : "KAF");
 }
 </script>
 
