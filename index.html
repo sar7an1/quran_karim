@@ -2,132 +2,44 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>قران كريم</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>قرآن يتلى آناء الليل وأطراف النهار</title>
 <style>
-:root{
-  --bg:#f4f8f6;
-  --card:#ffffff;
-  --main:#0e6848;
-  --text:#1b3a2f;
-}
-body.dark{
-  --bg:#0f1f1a;
-  --card:#162d25;
-  --text:#e7f3ee;
-}
-body{
-  margin:0;
-  font-family:Tahoma;
-  background:var(--bg);
-  color:var(--text);
-  transition:.3s;
-}
-header{
-  background:var(--main);
-  color:#fff;
-  padding:20px;
-  text-align:center;
-}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-  gap:15px;
-  padding:20px;
-}
-.card{
-  background:var(--card);
-  padding:20px;
-  border-radius:14px;
-  text-align:center;
-  cursor:pointer;
-  box-shadow:0 6px 15px rgba(0,0,0,.1);
-}
-.player-bar{
-  position:fixed;
-  bottom:0;left:0;right:0;
-  background:var(--card);
-  border-top:2px solid var(--main);
-  display:flex;
-  gap:10px;
-  align-items:center;
-  padding:10px;
-}
-.player-bar button{
-  background:var(--main);
-  color:#fff;
-  border:none;
-  padding:6px 10px;
-  border-radius:6px;
-}
-footer{
-  margin-bottom:70px;
-  text-align:center;
-  font-size:12px;
-  opacity:.7;
-}
-audio{display:none}
+body{font-family:tahoma;background:#f5f7f6;margin:0}
+header{background:#0e6848;color:#fff;padding:15px;text-align:center}
+input{width:90%;padding:10px;margin:10px}
+.reader{background:#fff;margin:10px;padding:12px;border-radius:8px;cursor:pointer}
 </style>
 </head>
-
 <body>
 
 <header>
-  <h3>قرآن يتلى آناء الليل وأطراف النهار</h3>
-  <p>صدقة جارية عني وعن جميع المسلمين</p>
-  <button onclick="toggleDark()">🌙</button>
+<h3>قرآن يتلى آناء الليل وأطراف النهار</h3>
+<p>صدقة جارية عني وعن جميع المسلمين</p>
 </header>
 
-<div class="grid" id="grid"></div>
+<input id="search" placeholder="ابحث عن قارئ">
 
-<footer>
-© قران كريم – صدقة جارية عني وعن جميع المسلمين
-</footer>
-
-<audio id="player"></audio>
-
-<div class="player-bar">
-  <button onclick="prev()">⏮️</button>
-  <button onclick="togglePlay()">▶️/⏸️</button>
-  <button onclick="next()">⏭️</button>
-  <button onclick="mute()">🔇</button>
-  <div id="now">لا يوجد تشغيل</div>
-</div>
+<div id="list"></div>
 
 <script>
-let playlist=[];
-let index=0;
-const player=document.getElementById("player");
-const now=document.getElementById("now");
-const grid=document.getElementById("grid");
-
-fetch("config.json")
-.then(r=>r.json())
-.then(cfg=>{
-  playlist.push(cfg.radio);
-  playlist.push(cfg.majd);
-  cfg.sheikhs.forEach(s=>playlist.push(s));
-
-  grid.innerHTML=`
-    <div class="card" onclick="play(0)">📻 ${cfg.radio.name}</div>
-    <div class="card" onclick="play(1)">📡 ${cfg.majd.name}</div>
-    <div class="card" onclick="window.open('${cfg.telegram.url}')">📨 قناة التليجرام</div>
-    <div class="card" onclick="play(2)">🎤 القرّاء</div>
-  `;
+fetch("data.json").then(r=>r.json()).then(d=>{
+  const list=document.getElementById("list");
+  const search=document.getElementById("search");
+  function render(){
+    list.innerHTML="";
+    d.readers
+      .filter(r=>r.name.includes(search.value))
+      .forEach(r=>{
+        list.innerHTML+=`
+          <div class="reader" onclick="location='reader.html?id=${r.id}'">
+            🎤 ${r.name}
+          </div>`;
+      });
+  }
+  search.oninput=render;
+  render();
 });
-
-function play(i){
-  index=i;
-  player.src=playlist[index].url;
-  player.play();
-  now.textContent="🔊 "+playlist[index].name;
-}
-function togglePlay(){player.paused?player.play():player.pause();}
-function next(){play((index+1)%playlist.length);}
-function prev(){play((index-1+playlist.length)%playlist.length);}
-function mute(){player.muted=!player.muted;}
-function toggleDark(){document.body.classList.toggle("dark");}
 </script>
 
 </body>
