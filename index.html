@@ -8,7 +8,21 @@ content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable
 <title>المكتبة الصوتية للقرآن الكريم</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+/* ===== الخط الرئيسي ===== */
+@font-face{
+  font-family:"KAF";
+  src:url("alfont_com_KAF-GULZAR-PC.otf") format("opentype");
+  font-weight:normal;
+  font-style:normal;
+}
+
+/* ===== Reset ===== */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"KAF", Tahoma, Arial;
+}
 
 :root{
   --green:#1f8f5f;
@@ -27,7 +41,6 @@ body.dark{
 }
 
 body{
-  font-family:Tahoma, Arial;
   background:var(--bg);
   color:var(--dark);
   min-height:100vh;
@@ -51,24 +64,21 @@ body{
   margin-inline:10px;
 }
 
-/* 🌙 */
 .icon-btn{
   cursor:pointer;
   font-size:20px;
 }
 
-/* 📻 Radio Box */
+/* ===== Radio ===== */
 .radio-box{
   display:flex;
   align-items:center;
   gap:6px;
-  padding:6px 10px;
+  padding:6px 12px;
   border-radius:8px;
   background:var(--green);
   color:#fff;
-  font-size:14px;
   cursor:pointer;
-  transition:.2s;
 }
 
 .radio-box:hover{
@@ -82,9 +92,10 @@ body{
 
 .header-search input{
   width:100%;
-  padding:8px 10px;
+  padding:8px 12px;
   border-radius:6px;
   border:1px solid #555;
+  font-size:14px;
 }
 
 /* ===== Telegram Name ===== */
@@ -92,17 +103,16 @@ body{
   display:flex;
   align-items:center;
   gap:8px;
-  padding:6px 12px;
+  padding:6px 14px;
   border-radius:8px;
   background:#0ea5e9;
   color:#fff;
-  font-weight:bold;
   text-decoration:none;
+  font-weight:bold;
 }
 
 .header-user img{
   width:22px;
-  height:22px;
 }
 
 /* ===== Layout ===== */
@@ -132,7 +142,7 @@ body{
   background:rgba(255,255,255,.12);
 }
 
-/* ===== Ad Box ===== */
+/* ===== Ads ===== */
 .ad-box{
   border:2px dashed #22c55e;
   border-radius:12px;
@@ -140,6 +150,7 @@ body{
   text-align:center;
   margin-bottom:20px;
   color:#22c55e;
+  font-size:20px;
 }
 
 /* ===== Content ===== */
@@ -150,10 +161,11 @@ body{
 
 .reader{
   background:var(--white);
-  border-radius:6px;
-  padding:14px;
-  margin-bottom:10px;
+  border-radius:8px;
+  padding:16px;
+  margin-bottom:12px;
   cursor:pointer;
+  font-size:18px;
 }
 
 .reader:hover{
@@ -200,19 +212,16 @@ body.dark .reader:hover{
 
 <body>
 
-<!-- ===== Header ===== -->
 <div class="header">
 
   <div class="header-space"></div>
 
   <div class="header-icons">
-
     <span class="icon-btn" onclick="toggleDark()">🌙</span>
 
     <div class="radio-box">
-      📻 <span>الراديو المباشر</span>
+      📻 الراديو المباشر
     </div>
-
   </div>
 
   <div class="header-search">
@@ -227,10 +236,8 @@ body.dark .reader:hover{
   </div>
 
   <div class="header-space"></div>
-
 </div>
 
-<!-- ===== Layout ===== -->
 <div class="layout">
 
   <div class="sidebar">
@@ -247,21 +254,16 @@ body.dark .reader:hover{
   </div>
 
   <div class="content">
-
-    <div class="ad-box">
-      📢 إعلان تحت الإنشاء
-    </div>
+    <div class="ad-box">📢 إعلان تحت الإنشاء</div>
 
     <div class="reader">الشيخ ماهر المعيقلي</div>
     <div class="reader">الشيخ عبدالباسط عبدالصمد</div>
     <div class="reader">الشيخ الحصري</div>
     <div class="reader">الشيخ المنشاوي</div>
-
   </div>
 
 </div>
 
-<!-- ===== Player ===== -->
 <div class="player">
   <button>⏮</button>
   <button>▶</button>
