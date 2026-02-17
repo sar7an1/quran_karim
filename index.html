@@ -19,12 +19,23 @@
   font-family:"ZAIN",Tahoma;
 }
 
+/* ===== الوضع الداكن (الافتراضي) ===== */
 :root{
   --green:#1f8f5f;
   --bg:#020617;
   --panel:#020617;
   --border:#1f2937;
   --text:#e5e7eb;
+  --sidebar:#01040d;
+}
+
+/* ===== الوضع الفاتح ===== */
+body.light{
+  --bg:#f4f6f8;
+  --panel:#ffffff;
+  --border:#d1d5db;
+  --text:#111827;
+  --sidebar:#e5e7eb;
 }
 
 body{
@@ -45,7 +56,9 @@ body{
   width:260px;
   padding:6px 10px;
   border-radius:6px;
-  border:none;
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:var(--text);
 }
 
 .radio-box{
@@ -53,6 +66,16 @@ body{
   color:#fff;
   padding:6px 12px;
   border-radius:6px;
+  margin-inline:8px;
+}
+
+.theme-toggle{
+  cursor:pointer;
+  font-size:20px;
+  padding:6px 10px;
+  border-radius:6px;
+  background:var(--panel);
+  border:1px solid var(--border);
 }
 
 .header-user a{
@@ -71,20 +94,20 @@ body{
 /* ===== Sidebar ===== */
 .sidebar{
   width:240px;
-  background:#01040d;
+  background:var(--sidebar);
   padding:15px;
   border-left:1px solid var(--border);
 }
 .sidebar a{
   display:block;
   padding:10px;
-  color:#fff;
+  color:var(--text);
   text-decoration:none;
   border-radius:6px;
   margin-bottom:6px;
 }
 .sidebar a:hover{
-  background:#020617;
+  background:var(--panel);
 }
 
 /* ===== Content ===== */
@@ -95,12 +118,15 @@ body{
 .reader{
   padding:16px;
   border-radius:10px;
-  background:#020617;
+  background:var(--panel);
   margin-bottom:12px;
   cursor:pointer;
 }
 .reader:hover{
   background:#1f2937;
+}
+body.light .reader:hover{
+  background:#e5e7eb;
 }
 
 /* ===== Player ===== */
@@ -109,7 +135,7 @@ body{
   bottom:0;
   right:240px;
   left:0;
-  background:#020617;
+  background:var(--panel);
   border-top:1px solid var(--border);
   padding:14px 10px;
 }
@@ -118,7 +144,7 @@ body{
   text-align:center;
   font-size:15px;
   margin-bottom:10px;
-  color:#93c5fd;
+  color:#3b82f6;
 }
 
 .player-controls{
@@ -163,6 +189,8 @@ body{
 
 <div class="header">
   <div class="header-space"></div>
+
+  <span class="theme-toggle" id="themeIcon" onclick="toggleTheme()">🌙</span>
 
   <div class="radio-box">📻 الراديو المباشر</div>
 
@@ -259,6 +287,13 @@ function toggleMute(){
 function setVol(v){}
 function prev(){}
 function next(){}
+
+/* ===== Dark / Light Toggle ===== */
+function toggleTheme(){
+  document.body.classList.toggle("light");
+  const icon=document.getElementById("themeIcon");
+  icon.textContent=document.body.classList.contains("light")?"☀️":"🌙";
+}
 </script>
 
 </body>
