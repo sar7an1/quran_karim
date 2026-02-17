@@ -1,0 +1,23 @@
+{
+  "radio": {
+    "name": "إذاعة القرآن الكريم",
+    "url": "https://n0b.radiojar.com/8s5u5tpdtwzuv"
+  },
+  "majd": {
+    "name": "قناة المجد",
+    "url": "https://edge.mixlr.com/channel/yznch"
+  },
+  "telegram": {
+    "url": "https://t.me/yourchannel"
+  },
+  "sheikhs": [
+    {
+      "name": "الشيخ عبدالباسط",
+      "url": "https://server7.mp3quran.net/basit/001.mp3"
+    },
+    {
+      "name": "الشيخ الحصري",
+      "url": "https://server13.mp3quran.net/husr/001.mp3"
+    }
+  ]
+}
