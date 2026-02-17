@@ -2,30 +2,33 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>قرآن يتلى آناء الليل وأطراف النهار</title>
-<style>
-body{font-family:tahoma;background:#f5f7f6;margin:0}
-header{background:#0e6848;color:#fff;padding:15px;text-align:center}
-input{width:90%;padding:10px;margin:10px}
-.reader{background:#fff;margin:10px;padding:12px;border-radius:8px;cursor:pointer}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-<h3>قرآن يتلى آناء الليل وأطراف النهار</h3>
-<p>صدقة جارية عني وعن جميع المسلمين</p>
+  <div class="logo">📖 القرآن الكريم</div>
+  <input id="search" placeholder="ابحث عن قارئ">
 </header>
 
-<input id="search" placeholder="ابحث عن قارئ">
+<div class="layout">
+  <div class="sidebar">
+    <a href="#">الرئيسية</a>
+    <a href="#">القراء</a>
+    <a href="#">إذاعة القرآن</a>
+    <a href="#">الرقية الشرعية</a>
+    <a href="#">قناة التليجرام</a>
+  </div>
 
-<div id="list"></div>
+  <div class="content" id="list"></div>
+</div>
 
 <script>
 fetch("data.json").then(r=>r.json()).then(d=>{
   const list=document.getElementById("list");
   const search=document.getElementById("search");
+
   function render(){
     list.innerHTML="";
     d.readers
