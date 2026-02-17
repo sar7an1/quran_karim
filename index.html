@@ -11,16 +11,20 @@
   font-family:"ZAIN";
   src:url("alfont_com_Zain-PC-VF.ttf") format("truetype");
 }
-*{margin:0;padding:0;box-sizing:border-box;font-family:"ZAIN",Tahoma}
 
-/* ===== Colors ===== */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"ZAIN",Tahoma;
+}
+
 :root{
   --green:#1f8f5f;
-  --green-dark:#15724a;
-  --bg:#0b1220;
-  --white:#0f172a;
+  --bg:#020617;
+  --panel:#020617;
+  --border:#1f2937;
   --text:#e5e7eb;
-  --sidebar:#020617;
 }
 
 body{
@@ -33,7 +37,7 @@ body{
   display:flex;
   align-items:center;
   padding:10px;
-  border-bottom:1px solid #1f2937;
+  border-bottom:1px solid var(--border);
 }
 .header-space{flex:1}
 
@@ -47,9 +51,8 @@ body{
 .radio-box{
   background:var(--green);
   color:#fff;
-  padding:6px 10px;
+  padding:6px 12px;
   border-radius:6px;
-  cursor:pointer;
 }
 
 .header-user a{
@@ -68,8 +71,9 @@ body{
 /* ===== Sidebar ===== */
 .sidebar{
   width:240px;
-  background:var(--sidebar);
+  background:#01040d;
   padding:15px;
+  border-left:1px solid var(--border);
 }
 .sidebar a{
   display:block;
@@ -80,7 +84,7 @@ body{
   margin-bottom:6px;
 }
 .sidebar a:hover{
-  background:#020617cc;
+  background:#020617;
 }
 
 /* ===== Content ===== */
@@ -89,13 +93,15 @@ body{
   padding:20px;
 }
 .reader{
-  padding:14px;
-  border-radius:8px;
+  padding:16px;
+  border-radius:10px;
   background:#020617;
-  margin-bottom:10px;
+  margin-bottom:12px;
   cursor:pointer;
 }
-.reader:hover{background:#1f2937}
+.reader:hover{
+  background:#1f2937;
+}
 
 /* ===== Player ===== */
 .player{
@@ -104,14 +110,14 @@ body{
   right:240px;
   left:0;
   background:#020617;
-  border-top:1px solid #1f2937;
-  padding:10px;
+  border-top:1px solid var(--border);
+  padding:14px 10px;
 }
 
 .player-title{
   text-align:center;
-  margin-bottom:6px;
-  font-size:14px;
+  font-size:15px;
+  margin-bottom:10px;
   color:#93c5fd;
 }
 
@@ -119,18 +125,18 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:12px;
+  gap:14px;
 }
 
 .player button{
   background:var(--green);
   border:none;
-  width:38px;
-  height:38px;
+  width:42px;
+  height:42px;
   border-radius:50%;
   color:#fff;
   cursor:pointer;
-  font-size:14px;
+  font-size:16px;
 }
 
 .player button.heart.active{
@@ -138,7 +144,11 @@ body{
 }
 
 .volume{
-  width:90px;
+  width:100px;
+}
+
+.mute{
+  background:#334155 !important;
 }
 
 /* ===== Responsive ===== */
@@ -192,19 +202,22 @@ body{
 
     <button class="heart" id="favBtn" onclick="toggleFav()">❤️</button>
 
-    <input type="range" class="volume" min="0" max="1" step="0.05" onchange="setVol(this.value)">
+    <button id="muteBtn" class="mute" onclick="toggleMute()">🔊</button>
+
+    <input type="range" class="volume" min="0" max="1" step="0.05" value="1" onchange="setVol(this.value)">
   </div>
 </div>
 
 <script>
-let current = "";
-let playing = false;
-let favs = JSON.parse(localStorage.getItem("favs")||"[]");
+let current="";
+let playing=false;
+let muted=false;
+let favs=JSON.parse(localStorage.getItem("favs")||"[]");
 
 function play(name){
-  current = name;
-  document.getElementById("now").innerText = name;
-  playing = true;
+  current=name;
+  document.getElementById("now").innerText=name;
+  playing=true;
   document.getElementById("playBtn").innerText="⏸";
   updateHeart();
 }
@@ -212,16 +225,14 @@ function play(name){
 function togglePlay(){
   if(!current)return;
   playing=!playing;
-  document.getElementById("playBtn").innerText = playing?"⏸":"▶";
+  document.getElementById("playBtn").innerText=playing?"⏸":"▶";
 }
 
 function toggleFav(){
   if(!current)return;
-  if(favs.includes(current)){
-    favs=favs.filter(f=>f!==current);
-  }else{
-    favs.push(current);
-  }
+  favs.includes(current)
+    ? favs=favs.filter(f=>f!==current)
+    : favs.push(current);
   localStorage.setItem("favs",JSON.stringify(favs));
   updateHeart();
 }
@@ -240,9 +251,14 @@ function showFav(){
 
 function showHome(){location.reload()}
 
+function toggleMute(){
+  muted=!muted;
+  document.getElementById("muteBtn").innerText=muted?"🔇":"🔊";
+}
+
+function setVol(v){}
 function prev(){}
 function next(){}
-function setVol(v){}
 </script>
 
 </body>
