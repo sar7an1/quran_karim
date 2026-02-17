@@ -8,27 +8,24 @@ content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable
 <title>المكتبة الصوتية للقرآن الكريم</title>
 
 <style>
-/* ===== الخطوط ===== */
-@font-face{
-  font-family:"KAF";
-  src:url("alfont_com_KAF-GULZAR-PC.otf") format("opentype");
-}
+/* ===== الخط الأساسي (Zain) ===== */
 @font-face{
   font-family:"ZAIN";
   src:url("alfont_com_Zain-PC-VF.ttf") format("truetype");
+  font-weight:normal;
+  font-style:normal;
 }
 
-/* ===== Reset + الخط الافتراضي ===== */
+/* ===== Reset ===== */
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family:var(--main-font);
+  font-family:"ZAIN", Tahoma, Arial;
 }
 
-/* ===== Variables ===== */
+/* ===== Colors ===== */
 :root{
-  --main-font:"KAF";
   --green:#1f8f5f;
   --green-dark:#15724a;
   --bg:#f4f6f8;
@@ -37,6 +34,7 @@ content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable
   --sidebar:#0f3d2e;
 }
 
+/* ===== Dark Mode ===== */
 body.dark{
   --bg:#020617;
   --white:#020617;
@@ -67,14 +65,10 @@ body{
   align-items:center;
 }
 
-/* ===== Icons ===== */
+/* ===== Dark Icon ===== */
 .icon-btn{
   cursor:pointer;
-  font-size:18px;
-  background:#111827;
-  color:#fff;
-  padding:6px 10px;
-  border-radius:8px;
+  font-size:20px;
 }
 
 /* ===== Radio ===== */
@@ -214,8 +208,7 @@ body.dark .reader:hover{
   <div class="header-space"></div>
 
   <div class="header-icons">
-    <div class="icon-btn" onclick="toggleFont()">Aa</div>
-    <div class="icon-btn" onclick="toggleDark()">🌙</div>
+    <span class="icon-btn" onclick="toggleDark()">🌙</span>
 
     <div class="radio-box">
       📻 الراديو المباشر
@@ -236,6 +229,7 @@ body.dark .reader:hover{
   <div class="header-space"></div>
 </div>
 
+<!-- ===== Layout ===== -->
 <div class="layout">
 
   <div class="sidebar">
@@ -262,6 +256,7 @@ body.dark .reader:hover{
 
 </div>
 
+<!-- ===== Player ===== -->
 <div class="player">
   <button>⏮</button>
   <button>▶</button>
@@ -272,12 +267,6 @@ body.dark .reader:hover{
 <script>
 function toggleDark(){
   document.body.classList.toggle("dark");
-}
-
-function toggleFont(){
-  const root = document.documentElement;
-  const current = getComputedStyle(root).getPropertyValue("--main-font").trim();
-  root.style.setProperty("--main-font", current === "KAF" ? "ZAIN" : "KAF");
 }
 </script>
 
