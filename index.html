@@ -49,6 +49,7 @@ body{
 
 .header-icons{
   display:flex;
+  align-items:center;
   gap:12px;
   margin-inline:10px;
 }
@@ -56,6 +57,37 @@ body{
 .icon-btn{
   cursor:pointer;
   font-size:20px;
+}
+
+/* ===== Radio Box ===== */
+.radio-box{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border:1px solid var(--green);
+  border-radius:6px;
+  cursor:pointer;
+  font-size:13px;
+  color:var(--green);
+  transition:.2s;
+  white-space:nowrap;
+}
+
+.radio-box:hover{
+  background:var(--green);
+  color:#fff;
+}
+
+/* Dark mode radio */
+body.dark .radio-box{
+  border-color:#4ade80;
+  color:#4ade80;
+}
+
+body.dark .radio-box:hover{
+  background:#4ade80;
+  color:#000;
 }
 
 .header-search{
@@ -131,7 +163,6 @@ body.dark .reader:hover{
   color:#fff;
 }
 
-
 /* ===== Player ===== */
 .player{
   position:fixed;
@@ -184,7 +215,11 @@ body.dark .reader:hover{
 
   <div class="header-icons">
     <span class="icon-btn" onclick="toggleDark()">🌙</span>
-    <span class="icon-btn">📻</span>
+
+    <div class="radio-box">
+      <span>📻</span>
+      <span>الراديو المباشر</span>
+    </div>
   </div>
 
   <div class="header-search">
