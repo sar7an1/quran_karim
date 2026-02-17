@@ -2,48 +2,188 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>قرآن يتلى آناء الليل وأطراف النهار</title>
-<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>المكتبة الصوتية للقرآن الكريم</title>
+
+<style>
+/* ===== Reset ===== */
+*{box-sizing:border-box;margin:0;padding:0}
+
+/* ===== Colors (مطابقة تقريبًا) ===== */
+:root{
+  --green:#1f8f5f;
+  --green-dark:#15724a;
+  --bg:#f3f5f7;
+  --white:#ffffff;
+  --gray:#e5e7eb;
+  --text:#1f2937;
+}
+
+/* ===== Body ===== */
+body{
+  font-family:Tahoma, Arial;
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* ===== Header ===== */
+.header{
+  background:var(--white);
+  border-bottom:1px solid var(--gray);
+  padding:10px 20px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.logo{
+  font-weight:bold;
+  color:var(--green);
+  font-size:18px;
+}
+
+.search-box{
+  flex:1;
+  display:flex;
+}
+
+.search-box input{
+  width:100%;
+  padding:10px 12px;
+  border:1px solid var(--gray);
+  border-radius:6px;
+  font-size:14px;
+}
+
+/* ===== Layout ===== */
+.layout{
+  display:flex;
+  min-height:calc(100vh - 60px);
+}
+
+/* ===== Sidebar ===== */
+.sidebar{
+  width:240px;
+  background:var(--white);
+  border-left:1px solid var(--gray);
+  padding:15px;
+}
+
+.sidebar a{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+  margin-bottom:6px;
+  text-decoration:none;
+  color:var(--text);
+  border-radius:6px;
+  font-size:14px;
+}
+
+.sidebar a:hover{
+  background:var(--gray);
+}
+
+/* ===== Content ===== */
+.content{
+  flex:1;
+  padding:20px;
+}
+
+.reader{
+  background:var(--white);
+  border:1px solid var(--gray);
+  border-radius:6px;
+  padding:12px 14px;
+  margin-bottom:8px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.reader:hover{
+  background:#f0faf6;
+  border-color:var(--green);
+}
+
+/* ===== Player ===== */
+.player{
+  position:fixed;
+  bottom:0;
+  right:0;
+  left:0;
+  background:var(--white);
+  border-top:1px solid var(--gray);
+  padding:10px 15px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.player button{
+  background:var(--green);
+  color:#fff;
+  border:none;
+  padding:6px 10px;
+  border-radius:4px;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.player button:hover{
+  background:var(--green-dark);
+}
+
+.player span{
+  font-size:13px;
+}
+</style>
 </head>
+
 <body>
 
-<header>
-  <div class="logo">📖 القرآن الكريم</div>
-  <input id="search" placeholder="ابحث عن قارئ">
-</header>
-
-<div class="layout">
-  <div class="sidebar">
-    <a href="#">الرئيسية</a>
-    <a href="#">القراء</a>
-    <a href="#">إذاعة القرآن</a>
-    <a href="#">الرقية الشرعية</a>
-    <a href="#">قناة التليجرام</a>
+<!-- ===== Header ===== -->
+<div class="header">
+  <div class="logo">mp3quran</div>
+  <div class="search-box">
+    <input type="text" placeholder="بحث باسم القارئ">
   </div>
-
-  <div class="content" id="list"></div>
 </div>
 
-<script>
-fetch("data.json").then(r=>r.json()).then(d=>{
-  const list=document.getElementById("list");
-  const search=document.getElementById("search");
+<!-- ===== Layout ===== -->
+<div class="layout">
 
-  function render(){
-    list.innerHTML="";
-    d.readers
-      .filter(r=>r.name.includes(search.value))
-      .forEach(r=>{
-        list.innerHTML+=`
-          <div class="reader" onclick="location='reader.html?id=${r.id}'">
-            🎤 ${r.name}
-          </div>`;
-      });
-  }
-  search.oninput=render;
-  render();
-});
-</script>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <a href="#">🏠 الرئيسية</a>
+    <a href="#">❤️ المفضلة</a>
+    <a href="#">📻 البث المباشر</a>
+    <a href="#">📖 تصفح القرآن</a>
+    <a href="#">🎧 التلاوات المرتبة</a>
+    <a href="#">⬇️ تحميل المصحف كاملًا</a>
+    <a href="#">📱 التطبيقات</a>
+    <a href="#">📚 تفسير القرآن</a>
+    <a href="#">⭐ القراءات العشر</a>
+    <a href="#">📢 الإذاعة</a>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <div class="reader">الشيخ ماهر المعيقلي</div>
+    <div class="reader">الشيخ عبدالباسط عبدالصمد</div>
+    <div class="reader">الشيخ الحصري</div>
+    <div class="reader">الشيخ المنشاوي</div>
+  </div>
+
+</div>
+
+<!-- ===== Player ===== -->
+<div class="player">
+  <button>⏮</button>
+  <button>▶</button>
+  <button>⏭</button>
+  <span>لم يتم اختيار تلاوة</span>
+</div>
 
 </body>
 </html>
