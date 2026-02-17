@@ -19,7 +19,7 @@ body.dark{
 }
 body{
   margin:0;
-  font-family:Tahoma, Arial;
+  font-family:Tahoma;
   background:var(--bg);
   color:var(--text);
   transition:.3s;
@@ -30,20 +30,6 @@ header{
   padding:20px;
   text-align:center;
 }
-header h1{
-  margin:0;
-  font-size:20px;
-}
-header p{
-  margin-top:8px;
-  font-size:14px;
-}
-.toggle{
-  position:absolute;
-  left:15px;
-  top:15px;
-  cursor:pointer;
-}
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
@@ -52,44 +38,34 @@ header p{
 }
 .card{
   background:var(--card);
-  border-radius:14px;
   padding:20px;
+  border-radius:14px;
   text-align:center;
   cursor:pointer;
   box-shadow:0 6px 15px rgba(0,0,0,.1);
-  font-size:16px;
 }
 .player-bar{
   position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
+  bottom:0;left:0;right:0;
   background:var(--card);
   border-top:2px solid var(--main);
   display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:10px;
   gap:10px;
+  align-items:center;
+  padding:10px;
 }
 .player-bar button{
   background:var(--main);
-  border:none;
   color:#fff;
+  border:none;
   padding:6px 10px;
   border-radius:6px;
-  cursor:pointer;
-}
-.now{
-  font-size:13px;
-  flex:1;
 }
 footer{
   margin-bottom:70px;
   text-align:center;
   font-size:12px;
   opacity:.7;
-  padding:10px;
 }
 audio{display:none}
 </style>
@@ -98,69 +74,60 @@ audio{display:none}
 <body>
 
 <header>
-  <div class="toggle" onclick="toggleDark()">🌙</div>
-  <h1>قرآن يتلى آناء الليل وأطراف النهار</h1>
+  <h3>قرآن يتلى آناء الليل وأطراف النهار</h3>
   <p>صدقة جارية عني وعن جميع المسلمين</p>
+  <button onclick="toggleDark()">🌙</button>
 </header>
 
-<div class="grid">
-  <div class="card" onclick="play(0)">📻 إذاعة قرآن كريم مباشر</div>
-  <div class="card" onclick="play(1)">📖 الرقية الشرعية</div>
-  <div class="card" onclick="play(2)">📡 قناة المجد مباشر</div>
-  <div class="card" onclick="play(3)">🎤 القرّاء</div>
-  <div class="card" onclick="window.open('https://t.me/yourchannel','_blank')">📨 قناة التليجرام</div>
-</div>
+<div class="grid" id="grid"></div>
 
 <footer>
 © قران كريم – صدقة جارية عني وعن جميع المسلمين
 </footer>
 
-<!-- الأصوات -->
 <audio id="player"></audio>
 
 <div class="player-bar">
   <button onclick="prev()">⏮️</button>
-  <button onclick="togglePlay()">▶️ / ⏸️</button>
+  <button onclick="togglePlay()">▶️/⏸️</button>
   <button onclick="next()">⏭️</button>
   <button onclick="mute()">🔇</button>
-  <div class="now" id="now">لا يوجد تشغيل</div>
+  <div id="now">لا يوجد تشغيل</div>
 </div>
 
 <script>
-const playlist = [
-  {name:"إذاعة القرآن الكريم",url:"https://n0b.radiojar.com/8s5u5tpdtwzuv"},
-  {name:"الرقية الشرعية",url:"https://server8.mp3quran.net/ruqya/1.mp3"},
-  {name:"قناة المجد مباشر",url:"https://edge.mixlr.com/channel/yznch"},
-  {name:"الشيخ عبدالباسط",url:"https://server7.mp3quran.net/basit/001.mp3"}
-];
-
+let playlist=[];
 let index=0;
 const player=document.getElementById("player");
 const now=document.getElementById("now");
+const grid=document.getElementById("grid");
+
+fetch("config.json")
+.then(r=>r.json())
+.then(cfg=>{
+  playlist.push(cfg.radio);
+  playlist.push(cfg.majd);
+  cfg.sheikhs.forEach(s=>playlist.push(s));
+
+  grid.innerHTML=`
+    <div class="card" onclick="play(0)">📻 ${cfg.radio.name}</div>
+    <div class="card" onclick="play(1)">📡 ${cfg.majd.name}</div>
+    <div class="card" onclick="window.open('${cfg.telegram.url}')">📨 قناة التليجرام</div>
+    <div class="card" onclick="play(2)">🎤 القرّاء</div>
+  `;
+});
 
 function play(i){
   index=i;
   player.src=playlist[index].url;
   player.play();
-  now.textContent="🔊 يتم التشغيل: "+playlist[index].name;
+  now.textContent="🔊 "+playlist[index].name;
 }
-function togglePlay(){
-  if(player.paused) player.play(); else player.pause();
-}
-function next(){
-  index=(index+1)%playlist.length;
-  play(index);
-}
-function prev(){
-  index=(index-1+playlist.length)%playlist.length;
-  play(index);
-}
-function mute(){
-  player.muted=!player.muted;
-}
-function toggleDark(){
-  document.body.classList.toggle("dark");
-}
+function togglePlay(){player.paused?player.play():player.pause();}
+function next(){play((index+1)%playlist.length);}
+function prev(){play((index-1+playlist.length)%playlist.length);}
+function mute(){player.muted=!player.muted;}
+function toggleDark(){document.body.classList.toggle("dark");}
 </script>
 
 </body>
