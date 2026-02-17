@@ -2,126 +2,73 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>المكتبة الصوتية للقرآن الكريم</title>
 
 <style>
-/* ===== الخط الأساسي (Zain) ===== */
 @font-face{
   font-family:"ZAIN";
   src:url("alfont_com_Zain-PC-VF.ttf") format("truetype");
-  font-weight:normal;
-  font-style:normal;
 }
-
-/* ===== Reset ===== */
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:"ZAIN", Tahoma, Arial;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"ZAIN",Tahoma}
 
 /* ===== Colors ===== */
 :root{
   --green:#1f8f5f;
   --green-dark:#15724a;
-  --bg:#f4f6f8;
-  --white:#ffffff;
-  --dark:#1f2937;
-  --sidebar:#0f3d2e;
-}
-
-/* ===== Dark Mode ===== */
-body.dark{
-  --bg:#020617;
-  --white:#020617;
-  --dark:#e5e7eb;
+  --bg:#0b1220;
+  --white:#0f172a;
+  --text:#e5e7eb;
   --sidebar:#020617;
 }
 
 body{
   background:var(--bg);
-  color:var(--dark);
-  min-height:100vh;
+  color:var(--text);
 }
 
 /* ===== Header ===== */
 .header{
   display:flex;
   align-items:center;
-  padding:10px 15px;
-  background:var(--white);
-  border-bottom:1px solid #333;
+  padding:10px;
+  border-bottom:1px solid #1f2937;
 }
-
 .header-space{flex:1}
 
-.header-icons{
-  display:flex;
-  gap:10px;
-  align-items:center;
+.header-search input{
+  width:260px;
+  padding:6px 10px;
+  border-radius:6px;
+  border:none;
 }
 
-/* ===== Dark Icon ===== */
-.icon-btn{
-  cursor:pointer;
-  font-size:20px;
-}
-
-/* ===== Radio ===== */
 .radio-box{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  padding:6px 12px;
-  border-radius:8px;
   background:var(--green);
   color:#fff;
+  padding:6px 10px;
+  border-radius:6px;
   cursor:pointer;
 }
-.radio-box:hover{
-  background:var(--green-dark);
-}
 
-/* ===== Search ===== */
-.header-search{
-  width:340px;
-}
-.header-search input{
-  width:100%;
-  padding:8px 12px;
-  border-radius:6px;
-  border:1px solid #555;
-}
-
-/* ===== Telegram ===== */
 .header-user a{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:6px 14px;
-  border-radius:8px;
   background:#0ea5e9;
+  padding:6px 12px;
+  border-radius:6px;
   color:#fff;
   text-decoration:none;
-  font-weight:bold;
 }
-.header-user img{width:22px}
 
 /* ===== Layout ===== */
 .layout{
   display:flex;
-  min-height:calc(100vh - 60px);
 }
 
 /* ===== Sidebar ===== */
 .sidebar{
   width:240px;
   background:var(--sidebar);
-  color:#fff;
   padding:15px;
 }
 .sidebar a{
@@ -133,18 +80,7 @@ body{
   margin-bottom:6px;
 }
 .sidebar a:hover{
-  background:rgba(255,255,255,.12);
-}
-
-/* ===== Ads ===== */
-.ad-box{
-  border:2px dashed #22c55e;
-  border-radius:12px;
-  padding:30px;
-  text-align:center;
-  margin-bottom:20px;
-  color:#22c55e;
-  font-size:20px;
+  background:#020617cc;
 }
 
 /* ===== Content ===== */
@@ -153,121 +89,160 @@ body{
   padding:20px;
 }
 .reader{
-  background:var(--white);
+  padding:14px;
   border-radius:8px;
-  padding:16px;
-  margin-bottom:12px;
+  background:#020617;
+  margin-bottom:10px;
   cursor:pointer;
-  font-size:20px;
 }
-.reader:hover{
-  background:#e9f7f1;
-}
-body.dark .reader:hover{
-  background:#1f2937;
-}
+.reader:hover{background:#1f2937}
 
 /* ===== Player ===== */
 .player{
   position:fixed;
   bottom:0;
+  right:240px;
   left:0;
-  right:0;
-  background:var(--white);
-  border-top:1px solid #333;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:18px;
+  background:#020617;
+  border-top:1px solid #1f2937;
   padding:10px;
 }
+
+.player-title{
+  text-align:center;
+  margin-bottom:6px;
+  font-size:14px;
+  color:#93c5fd;
+}
+
+.player-controls{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+}
+
 .player button{
   background:var(--green);
   border:none;
-  color:#fff;
-  width:44px;
-  height:44px;
+  width:38px;
+  height:38px;
   border-radius:50%;
+  color:#fff;
   cursor:pointer;
+  font-size:14px;
+}
+
+.player button.heart.active{
+  background:#dc2626;
+}
+
+.volume{
+  width:90px;
 }
 
 /* ===== Responsive ===== */
 @media(max-width:768px){
   .sidebar{display:none}
-  .header-search{width:100%}
-  .header-space{display:none}
+  .player{right:0}
 }
 </style>
 </head>
 
 <body>
 
-<!-- ===== Header ===== -->
 <div class="header">
-
   <div class="header-space"></div>
 
-  <div class="header-icons">
-    <span class="icon-btn" onclick="toggleDark()">🌙</span>
-
-    <div class="radio-box">
-      📻 الراديو المباشر
-    </div>
-  </div>
+  <div class="radio-box">📻 الراديو المباشر</div>
 
   <div class="header-search">
-    <input type="text" placeholder="بحث باسم القارئ">
+    <input placeholder="بحث باسم القارئ">
   </div>
 
   <div class="header-user">
-    <a href="https://web.telegram.org/a/#602487074" target="_blank">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg">
-      sar7an_1
-    </a>
+    <a href="https://web.telegram.org/a/#602487074" target="_blank">sar7an_1</a>
   </div>
 
   <div class="header-space"></div>
 </div>
 
-<!-- ===== Layout ===== -->
 <div class="layout">
 
   <div class="sidebar">
-    <a href="#">🏠 الرئيسية</a>
-    <a href="#">❤️ المفضلة</a>
-    <a href="#">📻 البث المباشر</a>
-    <a href="#">📖 تصفح القرآن</a>
-    <a href="#">🎧 التلاوات المرتبة</a>
-    <a href="#">⬇️ تحميل المصحف كاملًا</a>
-    <a href="#">📱 التطبيقات</a>
-    <a href="#">📚 تفسير القرآن</a>
-    <a href="#">⭐ القراءات العشر</a>
-    <a href="#">📢 الإذاعة</a>
+    <a href="#" onclick="showHome()">🏠 الرئيسية</a>
+    <a href="#" onclick="showFav()">❤️ المفضلة</a>
   </div>
 
-  <div class="content">
-    <div class="ad-box">📢 إعلان تحت الإنشاء</div>
-
-    <div class="reader">الشيخ ماهر المعيقلي</div>
-    <div class="reader">الشيخ عبدالباسط عبدالصمد</div>
-    <div class="reader">الشيخ الحصري</div>
-    <div class="reader">الشيخ المنشاوي</div>
+  <div class="content" id="list">
+    <div class="reader" onclick="play('الشيخ ماهر المعيقلي')">الشيخ ماهر المعيقلي</div>
+    <div class="reader" onclick="play('الشيخ عبدالباسط عبدالصمد')">الشيخ عبدالباسط عبدالصمد</div>
+    <div class="reader" onclick="play('الشيخ الحصري')">الشيخ الحصري</div>
   </div>
 
 </div>
 
-<!-- ===== Player ===== -->
 <div class="player">
-  <button>⏮</button>
-  <button>▶</button>
-  <button>⏭</button>
-  <span>لم يتم اختيار تلاوة</span>
+  <div class="player-title" id="now">لم يتم اختيار تلاوة</div>
+
+  <div class="player-controls">
+    <button onclick="prev()">⏮</button>
+    <button id="playBtn" onclick="togglePlay()">▶</button>
+    <button onclick="next()">⏭</button>
+
+    <button class="heart" id="favBtn" onclick="toggleFav()">❤️</button>
+
+    <input type="range" class="volume" min="0" max="1" step="0.05" onchange="setVol(this.value)">
+  </div>
 </div>
 
 <script>
-function toggleDark(){
-  document.body.classList.toggle("dark");
+let current = "";
+let playing = false;
+let favs = JSON.parse(localStorage.getItem("favs")||"[]");
+
+function play(name){
+  current = name;
+  document.getElementById("now").innerText = name;
+  playing = true;
+  document.getElementById("playBtn").innerText="⏸";
+  updateHeart();
 }
+
+function togglePlay(){
+  if(!current)return;
+  playing=!playing;
+  document.getElementById("playBtn").innerText = playing?"⏸":"▶";
+}
+
+function toggleFav(){
+  if(!current)return;
+  if(favs.includes(current)){
+    favs=favs.filter(f=>f!==current);
+  }else{
+    favs.push(current);
+  }
+  localStorage.setItem("favs",JSON.stringify(favs));
+  updateHeart();
+}
+
+function updateHeart(){
+  document.getElementById("favBtn").classList.toggle("active",favs.includes(current));
+}
+
+function showFav(){
+  const list=document.getElementById("list");
+  list.innerHTML="";
+  favs.forEach(f=>{
+    list.innerHTML+=`<div class="reader" onclick="play('${f}')">${f}</div>`;
+  });
+}
+
+function showHome(){location.reload()}
+
+function prev(){}
+function next(){}
+function setVol(v){}
 </script>
 
 </body>
