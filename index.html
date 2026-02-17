@@ -43,9 +43,7 @@ body{
   border-bottom:1px solid #ccc;
 }
 
-.header-space{
-  flex:1;
-}
+.header-space{flex:1}
 
 .header-icons{
   display:flex;
@@ -59,7 +57,7 @@ body{
   font-size:20px;
 }
 
-/* ===== Radio Box ===== */
+/* Radio box */
 .radio-box{
   display:flex;
   align-items:center;
@@ -70,7 +68,6 @@ body{
   cursor:pointer;
   font-size:13px;
   color:var(--green);
-  transition:.2s;
   white-space:nowrap;
 }
 
@@ -79,20 +76,17 @@ body{
   color:#fff;
 }
 
-/* Dark mode radio */
+/* Dark radio */
 body.dark .radio-box{
   border-color:#4ade80;
   color:#4ade80;
 }
-
 body.dark .radio-box:hover{
   background:#4ade80;
   color:#000;
 }
 
-.header-search{
-  width:360px;
-}
+.header-search{width:360px}
 
 .header-search input{
   width:100%;
@@ -142,6 +136,34 @@ body.dark .radio-box:hover{
   padding:20px;
 }
 
+/* ===== Ads ===== */
+.ads-box{
+  background:var(--white);
+  border:2px dashed var(--green);
+  border-radius:10px;
+  padding:20px;
+  margin-bottom:20px;
+  text-align:center;
+}
+
+.ads-box img,
+.ads-box video{
+  max-width:100%;
+  border-radius:8px;
+}
+
+.ads-placeholder{
+  color:#9ca3af;
+  font-size:16px;
+  padding:40px 10px;
+}
+
+body.dark .ads-box{
+  background:#020617;
+  border-color:#4ade80;
+}
+
+/* Readers */
 .reader{
   background:var(--white);
   border-radius:6px;
@@ -151,13 +173,11 @@ body.dark .radio-box:hover{
   transition:.2s;
 }
 
-/* Hover عادي */
 .reader:hover{
   background:#e9f7f1;
   color:#000;
 }
 
-/* Hover في الوضع الليلي */
 body.dark .reader:hover{
   background:#1f2937;
   color:#fff;
@@ -193,9 +213,7 @@ body.dark .reader:hover{
   background:var(--green-dark);
 }
 
-.player span{
-  font-size:14px;
-}
+.player span{font-size:14px}
 
 /* ===== Responsive ===== */
 @media(max-width:768px){
@@ -226,9 +244,7 @@ body.dark .reader:hover{
     <input type="text" placeholder="بحث باسم القارئ">
   </div>
 
-  <div class="header-user">
-    sar7an_1
-  </div>
+  <div class="header-user">sar7an_1</div>
 
   <div class="header-space"></div>
 
@@ -239,7 +255,7 @@ body.dark .reader:hover{
 
   <!-- Sidebar -->
   <div class="sidebar">
-    <a href="#">🏠 الرئيسية</a>
+    <a href="#" onclick="showAds()">🏠 الرئيسية</a>
     <a href="#">❤️ المفضلة</a>
     <a href="#">📻 البث المباشر</a>
     <a href="#">📖 تصفح القرآن</a>
@@ -253,10 +269,19 @@ body.dark .reader:hover{
 
   <!-- Content -->
   <div class="content">
+
+    <!-- Ads -->
+    <div id="adsBox" class="ads-box">
+      <div class="ads-placeholder">
+        🚧 إعلان تحت الإنشاء
+      </div>
+    </div>
+
     <div class="reader">الشيخ ماهر المعيقلي</div>
     <div class="reader">الشيخ عبدالباسط عبدالصمد</div>
     <div class="reader">الشيخ الحصري</div>
     <div class="reader">الشيخ المنشاوي</div>
+
   </div>
 
 </div>
@@ -272,6 +297,12 @@ body.dark .reader:hover{
 <script>
 function toggleDark(){
   document.body.classList.toggle("dark");
+}
+
+function showAds(){
+  document.getElementById("adsBox").scrollIntoView({
+    behavior:"smooth"
+  });
 }
 </script>
 
