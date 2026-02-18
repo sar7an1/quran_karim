@@ -6,6 +6,7 @@
 
 <title>المكتبة الصوتية للقرآن الكريم</title>
 
+<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
@@ -21,7 +22,7 @@
   font-family:"ZAIN",Tahoma;
 }
 
-/* ===== Themes ===== */
+/* ===== ألوان الوضع الداكن ===== */
 :root{
   --green:#1f8f5f;
   --bg:#020617;
@@ -31,6 +32,7 @@
   --sidebar:#01040d;
 }
 
+/* ===== الوضع الفاتح ===== */
 body.light{
   --bg:#f4f6f8;
   --panel:#ffffff;
@@ -45,34 +47,64 @@ body{
   min-height:100vh;
 }
 
-/* ===== Header (ثابت) ===== */
+/* ===== Header ===== */
 .header{
-  position:fixed;
-  top:0;
-  right:0;
-  left:0;
-  height:60px;
   display:flex;
   align-items:center;
   gap:10px;
   padding:10px;
-  background:var(--panel);
   border-bottom:1px solid var(--border);
-  z-index:1000;
 }
+
 .header-space{flex:1}
 
-/* ===== Sidebar (ثابتة) ===== */
+.header-search input{
+  width:260px;
+  padding:7px 10px;
+  border-radius:6px;
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:var(--text);
+}
+
+.radio-box{
+  background:var(--green);
+  color:#fff;
+  padding:7px 14px;
+  border-radius:6px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.theme-toggle{
+  cursor:pointer;
+  font-size:18px;
+  padding:6px 10px;
+  border-radius:6px;
+  background:var(--panel);
+  border:1px solid var(--border);
+}
+
+.header-user a{
+  background:#0ea5e9;
+  padding:7px 14px;
+  border-radius:6px;
+  color:#fff;
+  text-decoration:none;
+}
+
+/* ===== Layout ===== */
+.layout{
+  display:flex;
+}
+
+/* ===== Sidebar ===== */
 .sidebar{
-  position:fixed;
-  top:60px;
-  right:0;
   width:240px;
-  height:calc(100vh - 60px);
   background:var(--sidebar);
   padding:15px;
   border-left:1px solid var(--border);
-  overflow-y:auto;
 }
 
 .sidebar a{
@@ -83,36 +115,39 @@ body{
   border-radius:6px;
   margin-bottom:6px;
 }
+
 .sidebar a:hover{
   background:var(--panel);
 }
 
 /* ===== Content ===== */
 .content{
-  margin-top:60px;
-  margin-right:240px;
+  flex:1;
   padding:20px;
+  padding-bottom:120px;
 }
 
 /* ===== Ads ===== */
 .ad-box{
   border:2px dashed #22c55e;
   border-radius:12px;
-  padding:30px;
+  padding:16px;
   text-align:center;
   margin-bottom:20px;
   color:#22c55e;
-  font-size:20px;
+  font-size:16px;
 }
 
-/* ===== Reader ===== */
+/* ===== Readers ===== */
 .reader{
   padding:16px;
   border-radius:10px;
   background:var(--panel);
   margin-bottom:12px;
   cursor:pointer;
+  text-align:center;
 }
+
 .reader:hover{
   background:#1f2937;
 }
@@ -120,22 +155,21 @@ body.light .reader:hover{
   background:#e5e7eb;
 }
 
-/* ===== Player (ثابت تحت) ===== */
+/* ===== Player ===== */
 .player{
   position:fixed;
   bottom:0;
-  right:240px;
   left:0;
+  right:240px;
   background:var(--panel);
   border-top:1px solid var(--border);
-  padding:14px 10px;
-  z-index:999;
+  padding:12px 10px;
 }
 
 .player-title{
   text-align:center;
-  font-size:15px;
-  margin-bottom:10px;
+  font-size:14px;
+  margin-bottom:8px;
   color:#3b82f6;
 }
 
@@ -165,137 +199,153 @@ body.light .reader:hover{
   width:100px;
 }
 
-/* ===== Header elements ===== */
-.header-search input{
-  width:260px;
-  padding:6px 10px;
-  border-radius:6px;
-  border:1px solid var(--border);
-  background:var(--panel);
-  color:var(--text);
-}
-
-.radio-box{
-  background:var(--green);
-  color:#fff;
-  padding:6px 12px;
-  border-radius:6px;
-}
-
-.theme-toggle{
-  cursor:pointer;
-  font-size:18px;
-  padding:6px 10px;
-  border-radius:6px;
-  background:var(--panel);
-  border:1px solid var(--border);
-}
-
-.header-user a{
-  background:#0ea5e9;
-  padding:6px 12px;
-  border-radius:6px;
-  color:#fff;
-  text-decoration:none;
-}
-
 /* ===== Mobile ===== */
 @media(max-width:768px){
-  .sidebar{display:none}
-  .content{margin-right:0}
-  .player{right:0}
+
+  .header{
+    flex-wrap:wrap;
+  }
+
+  .header-search{
+    width:100%;
+    order:3;
+  }
+
+  .header-search input{
+    width:100%;
+  }
+
+  .sidebar{
+    display:none;
+  }
+
+  .player{
+    right:0;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- Header -->
+<!-- ===== Header ===== -->
 <div class="header">
-  <div class="header-space"></div>
+
+  <div class="header-user">
+    <a href="#">sar7an_1</a>
+  </div>
 
   <span class="theme-toggle" id="themeIcon" onclick="toggleTheme()">
     <i class="fa-solid fa-moon"></i>
   </span>
 
-  <div class="radio-box"><i class="fa-solid fa-radio"></i> الراديو المباشر</div>
+  <div class="radio-box">
+    <i class="fa-solid fa-radio"></i>
+    الراديو المباشر
+  </div>
 
   <div class="header-search">
     <input placeholder="بحث باسم القارئ">
   </div>
 
-  <div class="header-user">
-    <a href="https://web.telegram.org/a/#602487074" target="_blank">sar7an_1</a>
+</div>
+
+<!-- ===== Layout ===== -->
+<div class="layout">
+
+  <div class="sidebar">
+    <a href="index.html"><i class="fa-solid fa-house"></i> الرئيسية</a>
+    <a href="#"><i class="fa-solid fa-heart"></i> المفضلة</a>
+    <a href="moshaf.html"><i class="fa-solid fa-book-quran"></i> تصفح القرآن الكريم</a>
+    <a href="khatmat.html"><i class="fa-solid fa-microphone"></i> القرآن كاملًا – تلاوة مرتلة</a>
   </div>
 
-  <div class="header-space"></div>
+  <div class="content">
+
+    <div class="ad-box">📢 مساحة إعلانية</div>
+
+    <div class="reader" onclick="play('الشيخ ماهر المعيقلي')">الشيخ ماهر المعيقلي</div>
+    <div class="reader" onclick="play('الشيخ عبدالباسط عبدالصمد')">الشيخ عبدالباسط عبدالصمد</div>
+    <div class="reader" onclick="play('الشيخ الحصري')">الشيخ الحصري</div>
+
+  </div>
 </div>
 
-<!-- Sidebar -->
-<div class="sidebar">
-  <a href="index.html"><i class="fa-solid fa-house"></i> الرئيسية</a>
-  <a href="#"><i class="fa-solid fa-heart"></i> المفضلة</a>
-  <a href="moshaf.html"><i class="fa-solid fa-book-quran"></i> تصفح القرآن الكريم</a>
-  <a href="khatmat.html"><i class="fa-solid fa-microphone"></i> القرآن كاملًا – تلاوة مرتلة</a>
-</div>
-
-<!-- Content -->
-<div class="content" id="list">
-  <div class="ad-box">📢 مساحة إعلانية</div>
-
-  <div class="reader" onclick="play('الشيخ ماهر المعيقلي')">الشيخ ماهر المعيقلي</div>
-  <div class="reader" onclick="play('الشيخ عبدالباسط عبدالصمد')">الشيخ عبدالباسط عبدالصمد</div>
-  <div class="reader" onclick="play('الشيخ الحصري')">الشيخ الحصري</div>
-</div>
-
-<!-- Player -->
+<!-- ===== Player ===== -->
 <div class="player">
   <div class="player-title" id="now">لم يتم اختيار تلاوة</div>
+
   <div class="player-controls">
     <button><i class="fa-solid fa-backward-step"></i></button>
-    <button id="playBtn" onclick="togglePlay()"><i class="fa-solid fa-play"></i></button>
+
+    <button id="playBtn" onclick="togglePlay()">
+      <i class="fa-solid fa-play"></i>
+    </button>
+
     <button><i class="fa-solid fa-forward-step"></i></button>
-    <button class="heart" id="favBtn" onclick="toggleFav()"><i class="fa-regular fa-heart"></i></button>
-    <button id="muteBtn" onclick="toggleMute()"><i class="fa-solid fa-volume-high"></i></button>
+
+    <button class="heart" id="favBtn" onclick="toggleFav()">
+      <i class="fa-regular fa-heart"></i>
+    </button>
+
+    <button id="muteBtn" onclick="toggleMute()">
+      <i class="fa-solid fa-volume-high"></i>
+    </button>
+
     <input type="range" class="volume" min="0" max="1" step="0.05" value="1">
   </div>
 </div>
 
 <script>
-let current="",playing=false,muted=false;
+let current="";
+let playing=false;
+let muted=false;
 let favs=JSON.parse(localStorage.getItem("favs")||"[]");
 
 function play(name){
   current=name;
-  now.innerText=name;
+  document.getElementById("now").innerText=name;
   playing=true;
-  playBtn.innerHTML='<i class="fa-solid fa-pause"></i>';
+  document.getElementById("playBtn").innerHTML='<i class="fa-solid fa-pause"></i>';
   updateHeart();
 }
+
 function togglePlay(){
   if(!current) return;
   playing=!playing;
-  playBtn.innerHTML=playing?'<i class="fa-solid fa-pause"></i>':'<i class="fa-solid fa-play"></i>';
+  document.getElementById("playBtn").innerHTML=
+    playing ? '<i class="fa-solid fa-pause"></i>' : '<i class="fa-solid fa-play"></i>';
 }
+
 function toggleFav(){
   if(!current) return;
-  favs.includes(current)?favs=favs.filter(f=>f!==current):favs.push(current);
+  favs.includes(current)
+    ? favs=favs.filter(f=>f!==current)
+    : favs.push(current);
   localStorage.setItem("favs",JSON.stringify(favs));
   updateHeart();
 }
+
 function updateHeart(){
-  favBtn.classList.toggle("active",favs.includes(current));
-  favBtn.innerHTML=favs.includes(current)?'<i class="fa-solid fa-heart"></i>':'<i class="fa-regular fa-heart"></i>';
+  const btn=document.getElementById("favBtn");
+  btn.classList.toggle("active",favs.includes(current));
+  btn.innerHTML=favs.includes(current)
+    ? '<i class="fa-solid fa-heart"></i>'
+    : '<i class="fa-regular fa-heart"></i>';
 }
+
 function toggleMute(){
   muted=!muted;
-  muteBtn.innerHTML=muted?'<i class="fa-solid fa-volume-xmark"></i>':'<i class="fa-solid fa-volume-high"></i>';
+  document.getElementById("muteBtn").innerHTML=
+    muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
 }
+
 function toggleTheme(){
   document.body.classList.toggle("light");
-  themeIcon.innerHTML=document.body.classList.contains("light")
-    ?'<i class="fa-solid fa-sun"></i>'
-    :'<i class="fa-solid fa-moon"></i>';
+  const icon=document.querySelector("#themeIcon i");
+  icon.className=document.body.classList.contains("light")
+    ? "fa-solid fa-sun"
+    : "fa-solid fa-moon";
 }
 </script>
 
