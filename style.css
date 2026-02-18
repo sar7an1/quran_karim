@@ -1,3 +1,9 @@
+/* ===== Reset ===== */
+*{
+  box-sizing:border-box;
+}
+
+/* ===== Body ===== */
 body{
   margin:0;
   font-family:tahoma;
@@ -11,24 +17,31 @@ header{
   background:#fff;
   border-bottom:1px solid #ddd;
   padding:10px 20px;
+
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
 
   position:fixed;
   top:0;
   right:0;
   left:0;
+  height:60px;
   z-index:1000;
+}
+
+.logo{
+  font-weight:bold;
+  color:#0e6848;
 }
 
 /* ===== Layout ===== */
 .layout{
   display:flex;
-  margin-top:60px; /* ارتفاع الهيدر */
+  margin-top:60px; /* نفس ارتفاع الهيدر */
 }
 
-/* ===== Sidebar (يمين وثابتة) ===== */
+/* ===== Sidebar (يمين – ثابتة) ===== */
 .sidebar{
   width:220px;
   background:#fff;
@@ -40,6 +53,7 @@ header{
   right:0;
   height:calc(100vh - 60px);
   overflow-y:auto;
+
   z-index:900;
 }
 
@@ -59,7 +73,9 @@ header{
 .content{
   flex:1;
   padding:20px;
-  margin-right:220px; /* نفس عرض القايمة */
+
+  /* أهم سطر في الملف كله */
+  margin-right:220px;
 }
 
 /* ===== Cards ===== */
@@ -81,23 +97,29 @@ header{
   bottom:0;
   right:220px;
   left:0;
+
   background:#fff;
   border-top:1px solid #ccc;
   padding:10px;
+
   display:flex;
   align-items:center;
   gap:10px;
+
   z-index:950;
 }
 
 /* ===== Mobile ===== */
 @media(max-width:768px){
+
   .sidebar{
     display:none;
   }
+
   .content{
     margin-right:0;
   }
+
   .player{
     right:0;
   }
