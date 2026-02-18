@@ -3,6 +3,7 @@ body{
   font-family:tahoma;
   background:#f6f7f8;
   color:#222;
+  direction:rtl;
 }
 
 /* ===== Header ===== */
@@ -16,8 +17,8 @@ header{
 
   position:fixed;
   top:0;
-  right:0;
   left:0;
+  right:0;
   z-index:1000;
 }
 
@@ -29,21 +30,22 @@ header{
 /* ===== Layout ===== */
 .layout{
   display:flex;
-  margin-top:60px; /* ارتفاع الهيدر */
+  margin-top:60px;
 }
 
-/* ===== Sidebar (ثابتة) ===== */
+/* ===== Sidebar (ثابتة 100%) ===== */
 .sidebar{
   width:220px;
   background:#fff;
-  border-left:1px solid #ddd;
+  border-right:1px solid #ddd;
   padding:15px;
 
   position:fixed;
-  top:60px;        /* تحت الهيدر */
-  right:0;         /* RTL */
+  top:60px;
+  left:0;              /* ✅ بدل right */
   height:calc(100vh - 60px);
   overflow-y:auto;
+  z-index:900;
 }
 
 .sidebar a{
@@ -62,7 +64,7 @@ header{
 .content{
   flex:1;
   padding:20px;
-  margin-right:220px; /* نفس عرض القائمة */
+  margin-left:220px;   /* نفس عرض القائمة */
 }
 
 /* ===== Reader ===== */
@@ -82,30 +84,30 @@ header{
 .player{
   position:fixed;
   bottom:0;
-  left:0;
-  right:220px; /* يقف عند بداية القائمة */
+  left:220px;          /* يبدأ بعد القائمة */
+  right:0;
   background:#fff;
   border-top:1px solid #ccc;
   padding:10px;
   display:flex;
   align-items:center;
   gap:10px;
-  z-index:999;
+  z-index:950;
 }
 
 .player button{
   padding:5px 10px;
 }
 
-/* ===== Responsive ===== */
+/* ===== Mobile ===== */
 @media(max-width:768px){
   .sidebar{
     display:none;
   }
   .content{
-    margin-right:0;
+    margin-left:0;
   }
   .player{
-    right:0;
+    left:0;
   }
 }
