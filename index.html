@@ -6,6 +6,9 @@
 
 <title>المكتبة الصوتية للقرآن الكريم</title>
 
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <style>
 @font-face{
   font-family:"ZAIN";
@@ -19,7 +22,7 @@
   font-family:"ZAIN",Tahoma;
 }
 
-/* ===== الوضع الداكن (الافتراضي) ===== */
+/* ===== الوضع الداكن (افتراضي) ===== */
 :root{
   --green:#1f8f5f;
   --bg:#020617;
@@ -41,12 +44,14 @@ body.light{
 body{
   background:var(--bg);
   color:var(--text);
+  min-height:100vh;
 }
 
 /* ===== Header ===== */
 .header{
   display:flex;
   align-items:center;
+  gap:10px;
   padding:10px;
   border-bottom:1px solid var(--border);
 }
@@ -66,12 +71,11 @@ body{
   color:#fff;
   padding:6px 12px;
   border-radius:6px;
-  margin-inline:8px;
 }
 
 .theme-toggle{
   cursor:pointer;
-  font-size:20px;
+  font-size:18px;
   padding:6px 10px;
   border-radius:6px;
   background:var(--panel);
@@ -115,6 +119,18 @@ body{
   flex:1;
   padding:20px;
 }
+
+/* ===== Ads Box ===== */
+.ad-box{
+  border:2px dashed #22c55e;
+  border-radius:12px;
+  padding:30px;
+  text-align:center;
+  margin-bottom:20px;
+  color:#22c55e;
+  font-size:20px;
+}
+
 .reader{
   padding:16px;
   border-radius:10px;
@@ -133,8 +149,8 @@ body.light .reader:hover{
 .player{
   position:fixed;
   bottom:0;
-  right:240px;
   left:0;
+  right:240px;
   background:var(--panel);
   border-top:1px solid var(--border);
   padding:14px 10px;
@@ -173,10 +189,6 @@ body.light .reader:hover{
   width:100px;
 }
 
-.mute{
-  background:#334155 !important;
-}
-
 /* ===== Responsive ===== */
 @media(max-width:768px){
   .sidebar{display:none}
@@ -191,9 +203,11 @@ body.light .reader:hover{
 <div class="header">
   <div class="header-space"></div>
 
-  <span class="theme-toggle" id="themeIcon" onclick="toggleTheme()">🌙</span>
+  <span class="theme-toggle" id="themeIcon" onclick="toggleTheme()">
+    <i class="fa-solid fa-moon"></i>
+  </span>
 
-  <div class="radio-box">📻 الراديو المباشر</div>
+  <div class="radio-box"><i class="fa-solid fa-radio"></i> الراديو المباشر</div>
 
   <div class="header-search">
     <input placeholder="بحث باسم القارئ">
@@ -209,21 +223,25 @@ body.light .reader:hover{
 <!-- ===== Layout ===== -->
 <div class="layout">
 
-  <!-- Sidebar -->
   <div class="sidebar">
-    <a href="index.html">🏠 الرئيسية</a>
-    <a href="#" onclick="showFav()">❤️ المفضلة</a>
-    <a href="khatmat.html">🎙️ القرآن كاملًا – تلاوة مرتلة</a>
-    <a href="moshaf.html">📖 تصفح القرآن الكريم</a>
+    <a href="#"><i class="fa-solid fa-house"></i> الرئيسية</a>
+    <a href="#"><i class="fa-solid fa-heart"></i> المفضلة</a>
+    <a href="moshaf.html"><i class="fa-solid fa-book-quran"></i> تصفح القرآن الكريم</a>
+    <a href="khatmat.html"><i class="fa-solid fa-microphone"></i> القرآن كاملًا – تلاوة مرتلة</a>
   </div>
 
-  <!-- Content -->
   <div class="content" id="list">
+
+    <!-- Ads -->
+    <div class="ad-box">
+      📢 مساحة إعلانية
+    </div>
+
     <div class="reader" onclick="play('الشيخ ماهر المعيقلي')">الشيخ ماهر المعيقلي</div>
     <div class="reader" onclick="play('الشيخ عبدالباسط عبدالصمد')">الشيخ عبدالباسط عبدالصمد</div>
-    <div class="reader" onclick="play('الشيخ الحصري')">الشيخ محمود خليل الحصري</div>
-  </div>
+    <div class="reader" onclick="play('الشيخ الحصري')">الشيخ الحصري</div>
 
+  </div>
 </div>
 
 <!-- ===== Player ===== -->
@@ -231,15 +249,23 @@ body.light .reader:hover{
   <div class="player-title" id="now">لم يتم اختيار تلاوة</div>
 
   <div class="player-controls">
-    <button onclick="prev()">⏮</button>
-    <button id="playBtn" onclick="togglePlay()">▶</button>
-    <button onclick="next()">⏭</button>
+    <button onclick="prev()"><i class="fa-solid fa-backward-step"></i></button>
 
-    <button class="heart" id="favBtn" onclick="toggleFav()">❤️</button>
+    <button id="playBtn" onclick="togglePlay()">
+      <i class="fa-solid fa-play"></i>
+    </button>
 
-    <button id="muteBtn" class="mute" onclick="toggleMute()">🔊</button>
+    <button onclick="next()"><i class="fa-solid fa-forward-step"></i></button>
 
-    <input type="range" class="volume" min="0" max="1" step="0.05" value="1" onchange="setVol(this.value)">
+    <button class="heart" id="favBtn" onclick="toggleFav()">
+      <i class="fa-regular fa-heart"></i>
+    </button>
+
+    <button id="muteBtn" onclick="toggleMute()">
+      <i class="fa-solid fa-volume-high"></i>
+    </button>
+
+    <input type="range" class="volume" min="0" max="1" step="0.05" value="1">
   </div>
 </div>
 
@@ -253,18 +279,19 @@ function play(name){
   current=name;
   document.getElementById("now").innerText=name;
   playing=true;
-  document.getElementById("playBtn").innerText="⏸";
+  document.getElementById("playBtn").innerHTML='<i class="fa-solid fa-pause"></i>';
   updateHeart();
 }
 
 function togglePlay(){
-  if(!current)return;
+  if(!current) return;
   playing=!playing;
-  document.getElementById("playBtn").innerText=playing?"⏸":"▶";
+  document.getElementById("playBtn").innerHTML=
+    playing ? '<i class="fa-solid fa-pause"></i>' : '<i class="fa-solid fa-play"></i>';
 }
 
 function toggleFav(){
-  if(!current)return;
+  if(!current) return;
   favs.includes(current)
     ? favs=favs.filter(f=>f!==current)
     : favs.push(current);
@@ -273,31 +300,28 @@ function toggleFav(){
 }
 
 function updateHeart(){
-  document.getElementById("favBtn").classList.toggle("active",favs.includes(current));
-}
-
-function showFav(){
-  const list=document.getElementById("list");
-  list.innerHTML="";
-  favs.forEach(f=>{
-    list.innerHTML+=`<div class="reader" onclick="play('${f}')">${f}</div>`;
-  });
+  const btn=document.getElementById("favBtn");
+  btn.classList.toggle("active",favs.includes(current));
+  btn.innerHTML=favs.includes(current)
+    ? '<i class="fa-solid fa-heart"></i>'
+    : '<i class="fa-regular fa-heart"></i>';
 }
 
 function toggleMute(){
   muted=!muted;
-  document.getElementById("muteBtn").innerText=muted?"🔇":"🔊";
+  document.getElementById("muteBtn").innerHTML=
+    muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
 }
 
-function setVol(v){}
 function prev(){}
 function next(){}
 
-/* ===== Dark / Light Toggle ===== */
 function toggleTheme(){
   document.body.classList.toggle("light");
-  const icon=document.getElementById("themeIcon");
-  icon.textContent=document.body.classList.contains("light")?"☀️":"🌙";
+  const icon=document.getElementById("themeIcon").querySelector("i");
+  icon.className=document.body.classList.contains("light")
+    ? "fa-solid fa-sun"
+    : "fa-solid fa-moon";
 }
 </script>
 
