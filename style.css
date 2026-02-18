@@ -4,6 +4,8 @@ body{
   background:#f6f7f8;
   color:#222;
 }
+
+/* ===== Header ===== */
 header{
   background:#fff;
   border-bottom:1px solid #ddd;
@@ -11,33 +13,59 @@ header{
   display:flex;
   justify-content:space-between;
   align-items:center;
+
+  position:fixed;
+  top:0;
+  right:0;
+  left:0;
+  z-index:1000;
 }
+
 .logo{
   font-weight:bold;
   color:#0e6848;
 }
+
+/* ===== Layout ===== */
 .layout{
   display:flex;
+  margin-top:60px; /* ارتفاع الهيدر */
 }
+
+/* ===== Sidebar (ثابتة) ===== */
 .sidebar{
   width:220px;
   background:#fff;
   border-left:1px solid #ddd;
   padding:15px;
+
+  position:fixed;
+  top:60px;        /* تحت الهيدر */
+  right:0;         /* RTL */
+  height:calc(100vh - 60px);
+  overflow-y:auto;
 }
+
 .sidebar a{
   display:block;
   padding:8px;
   text-decoration:none;
   color:#333;
+  border-radius:4px;
 }
+
 .sidebar a:hover{
   background:#f0f0f0;
 }
+
+/* ===== Content ===== */
 .content{
   flex:1;
   padding:20px;
+  margin-right:220px; /* نفس عرض القائمة */
 }
+
+/* ===== Reader ===== */
 .reader{
   background:#fff;
   margin-bottom:10px;
@@ -45,21 +73,39 @@ header{
   border-radius:6px;
   cursor:pointer;
 }
+
 .reader:hover{
   background:#f2f8f5;
 }
+
+/* ===== Player ===== */
 .player{
   position:fixed;
   bottom:0;
   left:0;
-  right:0;
+  right:220px; /* يقف عند بداية القائمة */
   background:#fff;
   border-top:1px solid #ccc;
   padding:10px;
   display:flex;
   align-items:center;
   gap:10px;
+  z-index:999;
 }
+
 .player button{
   padding:5px 10px;
+}
+
+/* ===== Responsive ===== */
+@media(max-width:768px){
+  .sidebar{
+    display:none;
+  }
+  .content{
+    margin-right:0;
+  }
+  .player{
+    right:0;
+  }
 }
