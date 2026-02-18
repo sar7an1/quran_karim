@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>المكتبة الصوتية للقرآن الكريم</title>
 
 <!-- Font Awesome -->
@@ -22,7 +21,7 @@
   font-family:"ZAIN",Tahoma;
 }
 
-/* ===== ألوان الوضع الداكن ===== */
+/* ألوان */
 :root{
   --green:#1f8f5f;
   --bg:#020617;
@@ -32,7 +31,6 @@
   --sidebar:#01040d;
 }
 
-/* ===== الوضع الفاتح ===== */
 body.light{
   --bg:#f4f6f8;
   --panel:#ffffff;
@@ -45,22 +43,30 @@ body{
   background:var(--bg);
   color:var(--text);
   min-height:100vh;
+  padding-bottom:90px;
 }
 
 /* ===== Header ===== */
 .header{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:60px;
+  background:var(--panel);
+  border-bottom:1px solid var(--border);
   display:flex;
   align-items:center;
   gap:10px;
-  padding:10px;
-  border-bottom:1px solid var(--border);
+  padding:0 12px;
+  z-index:1000;
 }
 
-.header-space{flex:1}
+.spacer{flex:1}
 
 .header-search input{
-  width:260px;
-  padding:7px 10px;
+  width:220px;
+  padding:6px 10px;
   border-radius:6px;
   border:1px solid var(--border);
   background:var(--panel);
@@ -70,11 +76,8 @@ body{
 .radio-box{
   background:var(--green);
   color:#fff;
-  padding:7px 14px;
+  padding:6px 12px;
   border-radius:6px;
-  display:flex;
-  align-items:center;
-  gap:6px;
 }
 
 .theme-toggle{
@@ -86,17 +89,18 @@ body{
   border:1px solid var(--border);
 }
 
-.header-user a{
+.user-btn{
   background:#0ea5e9;
-  padding:7px 14px;
-  border-radius:6px;
   color:#fff;
+  padding:6px 12px;
+  border-radius:6px;
   text-decoration:none;
 }
 
 /* ===== Layout ===== */
 .layout{
   display:flex;
+  margin-top:60px;
 }
 
 /* ===== Sidebar ===== */
@@ -105,6 +109,10 @@ body{
   background:var(--sidebar);
   padding:15px;
   border-left:1px solid var(--border);
+  position:fixed;
+  top:60px;
+  bottom:0;
+  overflow-y:auto;
 }
 
 .sidebar a{
@@ -122,35 +130,35 @@ body{
 
 /* ===== Content ===== */
 .content{
-  flex:1;
+  margin-right:240px;
   padding:20px;
-  padding-bottom:120px;
+  width:100%;
 }
 
 /* ===== Ads ===== */
 .ad-box{
   border:2px dashed #22c55e;
   border-radius:12px;
-  padding:16px;
+  padding:25px;
   text-align:center;
   margin-bottom:20px;
   color:#22c55e;
-  font-size:16px;
+  font-size:20px;
 }
 
-/* ===== Readers ===== */
+/* ===== Reader ===== */
 .reader{
   padding:16px;
   border-radius:10px;
   background:var(--panel);
   margin-bottom:12px;
   cursor:pointer;
-  text-align:center;
 }
 
 .reader:hover{
   background:#1f2937;
 }
+
 body.light .reader:hover{
   background:#e5e7eb;
 }
@@ -163,7 +171,8 @@ body.light .reader:hover{
   right:240px;
   background:var(--panel);
   border-top:1px solid var(--border);
-  padding:12px 10px;
+  padding:12px;
+  z-index:1000;
 }
 
 .player-title{
@@ -196,31 +205,22 @@ body.light .reader:hover{
 }
 
 .volume{
-  width:100px;
+  width:90px;
 }
 
 /* ===== Mobile ===== */
 @media(max-width:768px){
-
-  .header{
-    flex-wrap:wrap;
-  }
-
-  .header-search{
-    width:100%;
-    order:3;
-  }
-
-  .header-search input{
-    width:100%;
-  }
-
   .sidebar{
     display:none;
   }
-
+  .content{
+    margin-right:0;
+  }
   .player{
     right:0;
+  }
+  .header-search input{
+    width:140px;
   }
 }
 </style>
@@ -228,38 +228,32 @@ body.light .reader:hover{
 
 <body>
 
-<!-- ===== Header ===== -->
+<!-- Header -->
 <div class="header">
+  <div class="radio-box"><i class="fa-solid fa-radio"></i> الراديو المباشر</div>
+  <span class="theme-toggle" onclick="toggleTheme()"><i class="fa-solid fa-moon"></i></span>
 
-  <div class="header-user">
-    <a href="#">sar7an_1</a>
-  </div>
-
-  <span class="theme-toggle" id="themeIcon" onclick="toggleTheme()">
-    <i class="fa-solid fa-moon"></i>
-  </span>
-
-  <div class="radio-box">
-    <i class="fa-solid fa-radio"></i>
-    الراديو المباشر
-  </div>
+  <div class="spacer"></div>
 
   <div class="header-search">
     <input placeholder="بحث باسم القارئ">
   </div>
 
+  <a class="user-btn" href="#">sar7an_1</a>
 </div>
 
-<!-- ===== Layout ===== -->
+<!-- Layout -->
 <div class="layout">
 
+  <!-- Sidebar -->
   <div class="sidebar">
     <a href="index.html"><i class="fa-solid fa-house"></i> الرئيسية</a>
     <a href="#"><i class="fa-solid fa-heart"></i> المفضلة</a>
-    <a href="moshaf.html"><i class="fa-solid fa-book-quran"></i> تصفح القرآن الكريم</a>
     <a href="khatmat.html"><i class="fa-solid fa-microphone"></i> القرآن كاملًا – تلاوة مرتلة</a>
+    <a href="moshaf.html"><i class="fa-solid fa-book-quran"></i> تصفح القرآن الكريم</a>
   </div>
 
+  <!-- Content -->
   <div class="content">
 
     <div class="ad-box">📢 مساحة إعلانية</div>
@@ -271,79 +265,29 @@ body.light .reader:hover{
   </div>
 </div>
 
-<!-- ===== Player ===== -->
+<!-- Player -->
 <div class="player">
   <div class="player-title" id="now">لم يتم اختيار تلاوة</div>
-
   <div class="player-controls">
     <button><i class="fa-solid fa-backward-step"></i></button>
-
-    <button id="playBtn" onclick="togglePlay()">
-      <i class="fa-solid fa-play"></i>
-    </button>
-
+    <button id="playBtn"><i class="fa-solid fa-play"></i></button>
     <button><i class="fa-solid fa-forward-step"></i></button>
-
-    <button class="heart" id="favBtn" onclick="toggleFav()">
-      <i class="fa-regular fa-heart"></i>
-    </button>
-
-    <button id="muteBtn" onclick="toggleMute()">
-      <i class="fa-solid fa-volume-high"></i>
-    </button>
-
-    <input type="range" class="volume" min="0" max="1" step="0.05" value="1">
+    <button class="heart" id="favBtn"><i class="fa-regular fa-heart"></i></button>
+    <button><i class="fa-solid fa-volume-high"></i></button>
+    <input type="range" class="volume">
   </div>
 </div>
 
 <script>
-let current="";
-let playing=false;
-let muted=false;
-let favs=JSON.parse(localStorage.getItem("favs")||"[]");
-
 function play(name){
-  current=name;
   document.getElementById("now").innerText=name;
-  playing=true;
   document.getElementById("playBtn").innerHTML='<i class="fa-solid fa-pause"></i>';
-  updateHeart();
-}
-
-function togglePlay(){
-  if(!current) return;
-  playing=!playing;
-  document.getElementById("playBtn").innerHTML=
-    playing ? '<i class="fa-solid fa-pause"></i>' : '<i class="fa-solid fa-play"></i>';
-}
-
-function toggleFav(){
-  if(!current) return;
-  favs.includes(current)
-    ? favs=favs.filter(f=>f!==current)
-    : favs.push(current);
-  localStorage.setItem("favs",JSON.stringify(favs));
-  updateHeart();
-}
-
-function updateHeart(){
-  const btn=document.getElementById("favBtn");
-  btn.classList.toggle("active",favs.includes(current));
-  btn.innerHTML=favs.includes(current)
-    ? '<i class="fa-solid fa-heart"></i>'
-    : '<i class="fa-regular fa-heart"></i>';
-}
-
-function toggleMute(){
-  muted=!muted;
-  document.getElementById("muteBtn").innerHTML=
-    muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
 }
 
 function toggleTheme(){
   document.body.classList.toggle("light");
-  const icon=document.querySelector("#themeIcon i");
-  icon.className=document.body.classList.contains("light")
+  document.querySelector(".theme-toggle i").className =
+    document.body.classList.contains("light")
     ? "fa-solid fa-sun"
     : "fa-solid fa-moon";
 }
