@@ -1,12 +1,9 @@
 body{
   margin:0;
-  font-family:Tahoma;
+  font-family:tahoma;
   background:#f6f7f8;
   color:#222;
   direction:rtl;
-
-  /* مسافة للهيدر */
-  padding-top:60px;
 }
 
 /* ===== Header ===== */
@@ -20,22 +17,18 @@ header{
 
   position:fixed;
   top:0;
-  left:0;
   right:0;
+  left:0;
   z-index:1000;
-}
-
-.logo{
-  font-weight:bold;
-  color:#0e6848;
 }
 
 /* ===== Layout ===== */
 .layout{
   display:flex;
+  margin-top:60px; /* ارتفاع الهيدر */
 }
 
-/* ===== Sidebar (ثابتة 100%) ===== */
+/* ===== Sidebar (يمين وثابتة) ===== */
 .sidebar{
   width:220px;
   background:#fff;
@@ -43,11 +36,10 @@ header{
   padding:15px;
 
   position:fixed;
-  top:60px;                /* تحت الهيدر */
-  right:0;                 /* RTL */
-  bottom:60px;             /* علشان مشغل الصوت */
+  top:60px;
+  right:0;
+  height:calc(100vh - 60px);
   overflow-y:auto;
-
   z-index:900;
 }
 
@@ -57,7 +49,6 @@ header{
   text-decoration:none;
   color:#333;
   border-radius:6px;
-  margin-bottom:4px;
 }
 
 .sidebar a:hover{
@@ -68,12 +59,10 @@ header{
 .content{
   flex:1;
   padding:20px;
-
-  margin-right:220px;      /* نفس عرض القائمة */
-  padding-bottom:80px;     /* علشان مشغل الصوت */
+  margin-right:220px; /* نفس عرض القايمة */
 }
 
-/* ===== Reader ===== */
+/* ===== Cards ===== */
 .reader{
   background:#fff;
   margin-bottom:10px;
@@ -90,43 +79,25 @@ header{
 .player{
   position:fixed;
   bottom:0;
-  right:220px;             /* يبدأ بعد القائمة */
+  right:220px;
   left:0;
-
   background:#fff;
   border-top:1px solid #ccc;
   padding:10px;
   display:flex;
   align-items:center;
   gap:10px;
-
   z-index:950;
-}
-
-.player button{
-  padding:6px 12px;
 }
 
 /* ===== Mobile ===== */
 @media(max-width:768px){
-
-  header{
-    position:relative;
-  }
-
-  body{
-    padding-top:0;
-  }
-
   .sidebar{
     display:none;
   }
-
   .content{
     margin-right:0;
-    padding-bottom:100px;
   }
-
   .player{
     right:0;
   }
