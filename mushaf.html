@@ -3,60 +3,63 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>المصحف الشريف</title>
 
 <style>
-body{
-  margin:0;
-  background:#020617;
-  color:#fff;
-  font-family:ZAIN, Tahoma;
+@font-face{
+  font-family:"ZAIN";
+  src:url("alfont_com_Zain-PC-VF.ttf") format("truetype");
 }
 
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"ZAIN", Tahoma;
+}
+
+body{
+  background:#020617;
+  color:#e5e7eb;
+  min-height:100vh;
+}
+
+/* ===== Header ===== */
 .header{
   padding:12px;
   text-align:center;
-  background:#020617;
   border-bottom:1px solid #1f2937;
-  font-size:20px;
 }
 
-.notice{
-  text-align:center;
-  padding:10px;
-  font-size:14px;
-  color:#94a3b8;
+.header h1{
+  font-size:22px;
 }
 
-.btn{
-  display:inline-block;
-  margin:15px auto;
-  padding:10px 18px;
-  background:#1f8f5f;
-  color:#fff;
-  border-radius:8px;
-  text-decoration:none;
-  font-size:16px;
+/* ===== PDF Viewer ===== */
+.viewer{
+  height:calc(100vh - 60px);
+}
+
+.viewer iframe{
+  width:100%;
+  height:100%;
+  border:none;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">📖 المصحف الشريف</div>
-
-<div class="notice">
-  يتم فتح المصحف في صفحة خارجية لسرعة التحميل
+<div class="header">
+  <h1>📖 المصحف الشريف</h1>
 </div>
 
-<div style="text-align:center">
-  <a class="btn"
-     href="https://www.mediafire.com/file/z6t41jl80efdfks/المصف+الشريف.pdf/file"
-     target="_blank">
-     فتح المصحف الشريف
-  </a>
+<div class="viewer">
+  <iframe 
+    src="https://docs.google.com/gview?url=https://www.mediafire.com/file/z6t41jl80efdfks/المصف+الشريف.pdf&embedded=true">
+  </iframe>
 </div>
 
 </body>
 </html>
-
