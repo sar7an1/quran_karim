@@ -13,7 +13,18 @@
         .prayer-row { border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 12px 0; }
         .prayer-row:last-child { border: none; }
         input[type="range"] { accent-color: #10b981; }
-        .copyright-bar { background: rgba(15, 23, 42, 0.8); border-top: 1px solid rgba(255,255,255,0.05); padding: 10px 0; }
+        .copyright-bar { padding: 10px 0; }
+        /* ستايل مربع الدعاء الجديد */
+        .dua-box {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 1.5rem;
+            padding: 15px;
+            margin: 20px auto;
+            max-width: 90%;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -82,7 +93,7 @@
             <span class="w-2 h-8 bg-emerald-600 rounded-full"></span> اختر القناة
         </h3>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
             <div onclick="selectStation('الإذاعة العامة', 'https://backup.qurango.net/radio/ertu_main', 'بث القاهرة الرئيسي')" class="p-8 bg-[#1e293b] rounded-[3rem] border-2 border-transparent hover:border-emerald-600 transition-all cursor-pointer group shadow-xl">
                 <h4 class="font-black text-xl mb-1 text-white">الإذاعة العامة</h4>
                 <p class="text-gray-500 text-sm font-bold">بث القاهرة المباشر</p>
@@ -93,11 +104,18 @@
                 <p class="text-gray-500 text-sm font-bold">اختر قارئك المفضل</p>
             </div>
         </div>
-    </main>
 
-    <footer class="copyright-bar text-center mb-40">
-        <p class="font-bold text-sm text-emerald-500 opacity-90">sar7an_1 ©[2026-2027]</p>
-    </footer>
+        <div class="text-center mb-40">
+            <div class="copyright-bar">
+                <p class="font-bold text-sm text-emerald-500 opacity-90">sar7an_1 ©[2026-2027]</p>
+            </div>
+            
+            <div class="dua-box">
+                <p class="text-emerald-400 text-lg font-bold mb-1">رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ</p>
+                <p class="text-[10px] text-gray-500 italic opacity-70">صدقة جارية</p>
+            </div>
+        </div>
+    </main>
 
     <div class="fixed bottom-0 left-0 right-0 bg-[#1e293b]/95 backdrop-blur-3xl border-t border-white/10 p-6 z-50">
         <div class="container mx-auto flex items-center justify-between">
@@ -151,7 +169,6 @@
 
         function updateClock() {
             const now = new Date();
-            // تنسيق التاريخ: 20/فبراير/2026
             const day = now.getDate();
             const year = now.getFullYear();
             const monthName = now.toLocaleDateString('ar-EG', { month: 'long' });
@@ -191,7 +208,6 @@
             rList.appendChild(div);
         });
 
-        /* المنطق الذكي للصوت */
         function selectStation(name, url, sub) {
             audio.pause();
             audio.src = url;
@@ -200,7 +216,7 @@
                 audio.play().then(() => {
                     isPlaying = true;
                     updateIcons(true);
-                }).catch(() => console.log("خطأ في التشغيل"));
+                }).catch(() => console.log("Play Error"));
             };
             document.getElementById('current-name').innerText = name;
             document.getElementById('current-reciter').innerText = sub;
