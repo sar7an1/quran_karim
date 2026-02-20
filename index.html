@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إذاعة القُرآن الكريم - sar7an_1</title>
+    <title>إِذَاعَة القُرآن الكريم - sar7an_1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
@@ -63,7 +63,7 @@
         </div>
 
         <div class="bg-[#1e293b]/50 rounded-[2.5rem] p-8 border border-white/5 mb-12 shadow-lg">
-            <h3 class="text-center text-gray-400 font-bold text-xs mb-4 uppercase tracking-widest">مواقيت الصلاة حسب منطقتك</h3>
+            <h3 class="text-center text-gray-400 font-bold text-xs mb-4 uppercase tracking-widest" id="prayer-header">مواقيت الصلاة</h3>
             
             <div class="flex justify-between items-center mb-6 px-2 border-b border-white/5 pb-4">
                 <div class="text-right">
@@ -149,18 +149,25 @@
         let selectedReader = null;
         let pTimes = {};
 
-        // جلب المواقيت بناءً على الموقع الجغرافي
         async function getPrayerTimes() {
             try {
-                // جلب بيانات الموقع عبر الـ IP
+                // 1. جلب اسم المحافظة والموقع
                 const locRes = await fetch('https://ipapi.co/json/');
                 const locData = await locRes.json();
-                const { city, latitude, longitude } = locData;
+                const city = locData.city;
+                const { latitude, longitude } = locData;
 
-                // جلب مواقيت الصلاة
+                // تحديث العنوان باسم المحافظة
+                document.getElementById('prayer-header').innerText = `مواقيت الصلاة حسب ${city}`;
+
+                // 2. جلب مواقيت الصلاة والتاريخ الهجري
                 const prayRes = await fetch(`https://api.aladhan.com/v1/timings?latitude=${latitude}&longitude=${longitude}&method=5`);
                 const prayData = await prayRes.json();
                 pTimes = prayData.data.timings;
+                
+                // عرض التاريخ الهجري من الـ API ليكون دقيقاً
+                const hijri = prayData.data.date.hijri;
+                document.getElementById('hijri-date').innerText = `${hijri.day} ${hijri.month.ar} ${hijri.year}`;
 
                 // عرض المواقيت في الجدول
                 document.getElementById('fajr').innerText = convertTo12h(pTimes.Fajr);
@@ -171,7 +178,7 @@
                 document.getElementById('isha').innerText = convertTo12h(pTimes.Isha);
 
             } catch (error) {
-                console.log("Error fetching prayer times", error);
+                console.log("Error", error);
             }
         }
 
@@ -184,8 +191,10 @@
 
         function updateClock() {
             const now = new Date();
+            // التاريخ الميلادي
             document.getElementById('gregorian-date').innerText = now.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' });
-            document.getElementById('hijri-date').innerText = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-uma', {day:'numeric', month:'long', year:'numeric'}).format(now);
+            
+            // الوقت المباشر
             document.getElementById('live-clock').innerText = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }).replace('AM', 'ص').replace('PM', 'م');
 
             if (pTimes.Fajr) {
@@ -209,11 +218,10 @@
             }
         }
 
-        // تشغيل الوظائف
         getPrayerTimes();
         setInterval(updateClock, 1000);
 
-        // --- باقي وظائف التشغيل (كما هي تماماً لضمان عدم تغيير الملامح) ---
+        // --- قوائم القراء والإذاعات ---
         const readersList = [
             { name: "ماهر المعيقلي", server: "https://server12.mp3quran.net/maher/" },
             { name: "مشاري العفاسي", server: "https://server8.mp3quran.net/afs/" },
