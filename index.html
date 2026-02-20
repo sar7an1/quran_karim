@@ -8,12 +8,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #0f172a; color: #f8fafc; margin: 0; padding-bottom: 140px; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #0f172a; color: #f8fafc; margin: 0; padding-bottom: 160px; }
         .prayer-card { aspect-ratio: 1 / 1; background: #1e293b; border-radius: 2.5rem; border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
         .player-text-shadow { text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
         .prayer-row { border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 12px 0; }
         .prayer-row:last-child { border: none; }
         input[type="range"] { accent-color: #10b981; }
+        /* شريط الحقوق الجديد */
+        .copyright-bar { background: rgba(15, 23, 42, 0.8); border-top: 1px solid rgba(255,255,255,0.05); padding: 10px 0; margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -95,11 +97,9 @@
         </div>
     </main>
 
-    <footer class="container mx-auto px-4 py-20 text-center border-t border-white/5">
-        <p class="font-black text-2xl tracking-tighter text-emerald-500 mb-4">sar7an_1 ©[2026-2027]</p>
-        <div class="text-gray-500 italic text-lg opacity-80">
-            "رَبَّنَا تَقَبَّلْ مِنَّا ۖ إِنَّكَ أَنتَ السَّمِيعُ الْعَلِيمُ"
-        </div>
+    <footer class="copyright-bar text-center">
+        <p class="font-bold text-sm text-emerald-500 opacity-90">sar7an_1 ©[2026-2027]</p>
+        <div class="text-[10px] text-gray-500 italic opacity-70">"رَبَّنَا تَقَبَّلْ مِنَّا ۖ إِنَّكَ أَنتَ السَّمِيعُ الْعَلِيمُ"</div>
     </footer>
 
     <div class="fixed bottom-0 left-0 right-0 bg-[#1e293b]/95 backdrop-blur-3xl border-t border-white/10 p-6 z-50">
@@ -141,22 +141,25 @@
             { name: "العشاء", time: "19:20" }
         ];
 
+        // تحديث روابط القراء لتعمل مباشرة
         const readers = [
-            { name: "الشيخ ماهر المعيقلي", url: "https://backup.qurango.net/radio/maher_al_moaikli" },
-            { name: "الشيخ عبد الباسط عبد الصمد", url: "https://backup.qurango.net/radio/abdulbasit_abdulsamad_mojawwad" },
-            { name: "الشيخ محمد صديق المنشاوي", url: "https://backup.qurango.net/radio/mohammed_siddiq_alminshawi_mojawwad" },
-            { name: "الشيخ مشاري العفاسي", url: "https://backup.qurango.net/radio/mishary_alafasi" },
-            { name: "الشيخ محمود خليل الحصري", url: "https://backup.qurango.net/radio/mahmoud_khalil_alhussary" },
-            { name: "الشيخ ياسر الدوسري", url: "https://backup.qurango.net/radio/yasser_aldosari" }
+            { name: "الشيخ ماهر المعيقلي", url: "https://server12.mp3quran.net/maher/128/001.mp3" },
+            { name: "الشيخ عبد الباسط (مجود)", url: "https://server7.mp3quran.net/basit/128/001.mp3" },
+            { name: "الشيخ المنشاوي (مجود)", url: "https://server10.mp3quran.net/minsh/128/001.mp3" },
+            { name: "الشيخ مشاري العفاسي", url: "https://server8.mp3quran.net/afs/128/001.mp3" },
+            { name: "الشيخ محمود الحصري", url: "https://server13.mp3quran.net/hussary/128/001.mp3" },
+            { name: "الشيخ ياسر الدوسري", url: "https://server11.mp3quran.net/yasser/128/001.mp3" }
         ];
 
         const audio = document.getElementById('main-audio');
         let isPlaying = false;
 
-        // تحديث الوقت والعداد التنازلي
         function updateClock() {
             const now = new Date();
-            document.getElementById('live-clock').innerText = now.toLocaleTimeString('en-EG', { hour: '2-digit', minute: '2-digit' });
+            // تحويل AM/PM إلى ص/م مع أرقام إنجليزية
+            let timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+            timeStr = timeStr.replace('AM', 'ص').replace('PM', 'م');
+            document.getElementById('live-clock').innerText = timeStr;
 
             let nextP = null;
             let minDiff = Infinity;
@@ -202,7 +205,12 @@
         }
 
         function togglePlay() { isPlaying ? pauseAudio() : playAudio(); }
-        function playAudio() { if(!audio.src) selectStation('الإذاعة العامة', 'https://backup.qurango.net/radio/ertu_main', 'بث مباشر من القاهرة'); audio.play(); isPlaying = true; updateIcons(true); }
+        function playAudio() { 
+            if(!audio.src) selectStation('الإذاعة العامة', 'https://backup.qurango.net/radio/ertu_main', 'بث مباشر من القاهرة'); 
+            audio.play().catch(err => console.log("خطأ في التشغيل: ", err));
+            isPlaying = true; 
+            updateIcons(true); 
+        }
         function pauseAudio() { audio.pause(); isPlaying = false; updateIcons(false); }
         
         function updateIcons(play) {
