@@ -14,7 +14,7 @@
         .grid-item-custom:hover { background: #10b981; border-color: #10b981; transform: translateY(-2px); }
         .prayer-row { border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 10px 0; }
         .dua-box { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 1.5rem; padding: 15px; margin: 20px auto; max-width: 90%; }
-        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 15px; height: 15px; background: #10b981; cursor: pointer; border-radius: 50%; }
+        input[type="range"] { accent-color: #10b981; }
     </style>
 </head>
 <body>
@@ -64,7 +64,6 @@
 
         <div class="bg-[#1e293b]/50 rounded-[2.5rem] p-8 border border-white/5 mb-12 shadow-lg">
             <h3 class="text-center text-gray-400 font-bold text-xs mb-4 uppercase tracking-widest">مواقيت الصلاة حسب توقيتك المحلي</h3>
-            
             <div class="flex justify-between items-center mb-6 px-2 border-b border-white/5 pb-4">
                 <div class="text-right">
                     <p class="text-[10px] text-gray-400 uppercase font-bold">الميلادي</p>
@@ -75,7 +74,6 @@
                     <span id="hijri-date" class="text-sm font-bold text-amber-500">...</span>
                 </div>
             </div>
-
             <div class="grid grid-cols-3 gap-6 text-center text-white">
                 <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">الفجر</p> <p class="font-black text-emerald-400" id="fajr">-</p> </div>
                 <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">الشروق</p> <p class="font-black" id="sunrise">-</p> </div>
@@ -89,11 +87,11 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
             <div onclick="openReadersModal()" class="p-8 bg-[#1e293b] rounded-[3rem] border-2 border-transparent hover:border-emerald-600 transition-all cursor-pointer group shadow-xl">
                 <h4 class="font-black text-xl mb-1 text-white">المصحف المرتل</h4>
-                <p class="text-gray-500 text-sm font-bold">تلاوات لـ 11 قارئ</p>
+                <p class="text-gray-500 text-sm font-bold">11 قارئ - 114 سورة</p>
             </div>
             <div onclick="openRadioModal()" class="p-8 bg-[#1e293b] rounded-[3rem] border-2 border-transparent hover:border-blue-600 transition-all cursor-pointer group shadow-xl">
                 <h4 class="font-black text-xl mb-1 text-white">إذاعات القراء</h4>
-                <p class="text-gray-500 text-sm font-bold">20+ إذاعة وبث مباشر</p>
+                <p class="text-gray-500 text-sm font-bold">20+ إذاعة مباشرة</p>
             </div>
         </div>
 
@@ -115,7 +113,7 @@
                 <i id="mini-play-icon" class="fa-solid fa-play text-3xl"></i>
             </button>
             <div class="flex-1 flex justify-end">
-                <input type="range" min="0" max="1" step="0.1" value="0.8" oninput="audio.volume=this.value" class="w-24 accent-emerald-500">
+                <input type="range" min="0" max="1" step="0.1" value="0.8" oninput="audio.volume=this.value" class="w-24">
             </div>
         </div>
     </div>
@@ -143,17 +141,14 @@
 
     <script>
         const audio = document.getElementById('main-audio');
-        let isPlaying = false;
-        let pTimes = {};
-        let selectedReader = null;
+        let isPlaying = false; let pTimes = {}; let selectedReader = null;
 
-        // --- نظام المواقيت مع تعديل الهجري ليكون 2 رمضان ---
         async function getPrayerTimes() {
             try {
                 const locRes = await fetch('https://ipapi.co/json/');
                 const locData = await locRes.json();
                 
-                // adjustment=1 لزيادة يوم واحد ليوافق الرؤية (2 رمضان)
+                // adjustment=1 لضبط التاريخ مع الرؤية في مصر (هيتغير لوحده كل يوم)
                 const prayRes = await fetch(`https://api.aladhan.com/v1/timings?latitude=${locData.latitude}&longitude=${locData.longitude}&method=5&adjustment=1`);
                 const prayData = await prayRes.json();
                 pTimes = prayData.data.timings;
@@ -164,7 +159,7 @@
                 const ids = ['fajr','sunrise','dhuhr','asr','maghrib','isha'];
                 const keys = ['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];
                 ids.forEach((id, i) => document.getElementById(id).innerText = convertTo12h(pTimes[keys[i]]));
-            } catch (e) { console.log("Prayer Error:", e); }
+            } catch (e) { console.log(e); }
         }
 
         function convertTo12h(time) {
@@ -178,7 +173,6 @@
             const now = new Date();
             document.getElementById('gregorian-date').innerText = now.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' });
             document.getElementById('live-clock').innerText = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }).replace('AM', 'ص').replace('PM', 'م');
-
             if (pTimes.Fajr) {
                 const prayers = [{n:"الفجر",t:pTimes.Fajr},{n:"الظهر",t:pTimes.Dhuhr},{n:"العصر",t:pTimes.Asr},{n:"المغرب",t:pTimes.Maghrib},{n:"العشاء",t:pTimes.Isha}];
                 let nextP = null; let minDiff = Infinity;
@@ -197,10 +191,8 @@
             }
         }
 
-        getPrayerTimes();
-        setInterval(updateClock, 1000);
+        getPrayerTimes(); setInterval(updateClock, 1000);
 
-        // --- القراء والإذاعات ---
         const readersList = [
             { name: "ماهر المعيقلي", server: "https://server12.mp3quran.net/maher/" },
             { name: "مشاري العفاسي", server: "https://server8.mp3quran.net/afs/" },
@@ -232,10 +224,8 @@
             { name: "صلاح بو خاطر", url: "https://backup.qurango.net/radio/salah_bukhatir" },
             { name: "تفسير القرآن الكريم", url: "https://backup.qurango.net/radio/tafseer" },
             { name: "الرقية الشرعية", url: "https://backup.qurango.net/radio/roqiah" },
-            { name: "تلاوات خاشعة", url: "https://backup.qurango.net/radio/salma" },
             { name: "أذكار الصباح", url: "https://backup.qurango.net/radio/athkar_sabah" },
-            { name: "أذكار المساء", url: "https://backup.qurango.net/radio/athkar_masa" },
-            { name: "تلاوات قرآنية متنوعة", url: "https://backup.qurango.net/radio/mix_quran" }
+            { name: "أذكار المساء", url: "https://backup.qurango.net/radio/athkar_masa" }
         ];
 
         const surahNames = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
@@ -247,8 +237,7 @@
         const rList = document.getElementById('readers-list');
         readersList.forEach(r => {
             const div = document.createElement('div');
-            div.className = "grid-item-custom";
-            div.innerText = r.name;
+            div.className = "grid-item-custom"; div.innerText = r.name;
             div.onclick = () => { selectedReader = r; openSurahModal(); };
             rList.appendChild(div);
         });
@@ -256,21 +245,17 @@
         const raList = document.getElementById('radio-list');
         radioStations.forEach(s => {
             const div = document.createElement('div');
-            div.className = "grid-item-custom";
-            div.innerText = s.name;
+            div.className = "grid-item-custom"; div.innerText = s.name;
             div.onclick = () => { playStation(s.name, s.url); closeModal('radio-modal'); };
             raList.appendChild(div);
         });
 
         function openSurahModal() {
-            closeModal('readers-modal');
-            const sList = document.getElementById('surah-list');
-            sList.innerHTML = '';
+            closeModal('readers-modal'); const sList = document.getElementById('surah-list'); sList.innerHTML = '';
             document.getElementById('surah-title').innerText = `سور القارئ: ${selectedReader.name}`;
             surahNames.forEach((s, i) => {
                 const item = document.createElement('div');
-                item.className = "grid-item-custom text-[12px]";
-                item.innerText = s;
+                item.className = "grid-item-custom text-[12px]"; item.innerText = s;
                 item.onclick = () => { playSurah(i+1, s); closeModal('surah-modal'); };
                 sList.appendChild(item);
             });
@@ -279,14 +264,12 @@
 
         function playSurah(id, sName) {
             const num = id.toString().padStart(3, '0');
-            audio.src = `${selectedReader.server}${num}.mp3`;
-            audio.play(); isPlaying = true;
+            audio.src = `${selectedReader.server}${num}.mp3`; audio.play(); isPlaying = true;
             updateUI(selectedReader.name, `سورة ${sName}`);
         }
 
         function playStation(name, url) {
-            audio.src = url;
-            audio.play(); isPlaying = true;
+            audio.src = url; audio.play(); isPlaying = true;
             updateUI(name, "بث مباشر");
         }
 
@@ -301,9 +284,8 @@
 
         function togglePlay() {
             if(!audio.src) return;
-            if (isPlaying) { audio.pause(); isPlaying = false; }
-            else { audio.play(); isPlaying = true; }
-            updateIcons(isPlaying);
+            isPlaying ? audio.pause() : audio.play();
+            isPlaying = !isPlaying; updateIcons(isPlaying);
         }
 
         function updateIcons(play) {
