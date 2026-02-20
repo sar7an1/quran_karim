@@ -14,6 +14,7 @@
         .grid-item-custom:hover { background: #10b981; border-color: #10b981; transform: translateY(-2px); }
         .prayer-row { border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 10px 0; }
         .dua-box { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 1.5rem; padding: 15px; margin: 20px auto; max-width: 90%; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 15px; height: 15px; background: #10b981; cursor: pointer; border-radius: 50%; }
     </style>
 </head>
 <body>
@@ -88,11 +89,11 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
             <div onclick="openReadersModal()" class="p-8 bg-[#1e293b] rounded-[3rem] border-2 border-transparent hover:border-emerald-600 transition-all cursor-pointer group shadow-xl">
                 <h4 class="font-black text-xl mb-1 text-white">المصحف المرتل</h4>
-                <p class="text-gray-500 text-sm font-bold">11 شيخ - 114 سورة</p>
+                <p class="text-gray-500 text-sm font-bold">تلاوات لـ 11 قارئ</p>
             </div>
             <div onclick="openRadioModal()" class="p-8 bg-[#1e293b] rounded-[3rem] border-2 border-transparent hover:border-blue-600 transition-all cursor-pointer group shadow-xl">
                 <h4 class="font-black text-xl mb-1 text-white">إذاعات القراء</h4>
-                <p class="text-gray-500 text-sm font-bold">أكثر من 20 إذاعة مباشرة</p>
+                <p class="text-gray-500 text-sm font-bold">20+ إذاعة وبث مباشر</p>
             </div>
         </div>
 
@@ -110,7 +111,7 @@
                 <p id="mini-name" class="font-black text-lg text-white truncate">توقف</p>
                 <p id="mini-sub" class="text-[10px] text-emerald-500 font-bold uppercase">القرآن الكريم</p>
             </div>
-            <button id="main-play-btn" onclick="togglePlay()" class="w-20 h-20 bg-emerald-600 text-white rounded-full flex items-center justify-center shadow-2xl -mt-16 border-[6px] border-[#0f172a]">
+            <button onclick="togglePlay()" class="w-20 h-20 bg-emerald-600 text-white rounded-full flex items-center justify-center shadow-2xl -mt-16 border-[6px] border-[#0f172a]">
                 <i id="mini-play-icon" class="fa-solid fa-play text-3xl"></i>
             </button>
             <div class="flex-1 flex justify-end">
@@ -125,14 +126,12 @@
             <div class="p-6 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-4" id="readers-list"></div>
         </div>
     </div>
-
     <div id="surah-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-[70] hidden flex items-center justify-center p-4">
         <div class="bg-[#1e293b] w-full max-w-4xl max-h-[85vh] rounded-[3rem] border border-white/10 overflow-hidden flex flex-col">
             <div class="p-6 border-b border-white/10 flex justify-between items-center text-white"><h3 class="text-xl font-black" id="surah-title">السور</h3><button onclick="closeModal('surah-modal')" class="text-2xl">✕</button></div>
             <div class="p-6 overflow-y-auto grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2" id="surah-list"></div>
         </div>
     </div>
-
     <div id="radio-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[60] hidden flex items-center justify-center p-4">
         <div class="bg-[#1e293b] w-full max-w-2xl max-h-[80vh] rounded-[3rem] border border-white/10 overflow-hidden flex flex-col shadow-2xl">
             <div class="p-6 border-b border-white/10 flex justify-between items-center text-white"><h3 class="text-xl font-black">إذاعات القرآن المباشرة</h3><button onclick="closeModal('radio-modal')" class="text-2xl">✕</button></div>
@@ -148,20 +147,24 @@
         let pTimes = {};
         let selectedReader = null;
 
-        // --- نظام المواقيت ---
+        // --- نظام المواقيت مع تعديل الهجري ليكون 2 رمضان ---
         async function getPrayerTimes() {
             try {
                 const locRes = await fetch('https://ipapi.co/json/');
                 const locData = await locRes.json();
-                const prayRes = await fetch(`https://api.aladhan.com/v1/timings?latitude=${locData.latitude}&longitude=${locData.longitude}&method=5`);
+                
+                // adjustment=1 لزيادة يوم واحد ليوافق الرؤية (2 رمضان)
+                const prayRes = await fetch(`https://api.aladhan.com/v1/timings?latitude=${locData.latitude}&longitude=${locData.longitude}&method=5&adjustment=1`);
                 const prayData = await prayRes.json();
                 pTimes = prayData.data.timings;
+                
                 const hj = prayData.data.date.hijri;
                 document.getElementById('hijri-date').innerText = `${hj.day} ${hj.month.ar} ${hj.year}`;
+
                 const ids = ['fajr','sunrise','dhuhr','asr','maghrib','isha'];
                 const keys = ['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];
                 ids.forEach((id, i) => document.getElementById(id).innerText = convertTo12h(pTimes[keys[i]]));
-            } catch (e) { console.log(e); }
+            } catch (e) { console.log("Prayer Error:", e); }
         }
 
         function convertTo12h(time) {
@@ -175,20 +178,21 @@
             const now = new Date();
             document.getElementById('gregorian-date').innerText = now.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' });
             document.getElementById('live-clock').innerText = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }).replace('AM', 'ص').replace('PM', 'م');
+
             if (pTimes.Fajr) {
-                const prayers = [{n: "الفجر", t: pTimes.Fajr}, {n: "الظهر", t: pTimes.Dhuhr}, {n: "العصر", t: pTimes.Asr}, {n: "المغرب", t: pTimes.Maghrib}, {n: "العشاء", t: pTimes.Isha}];
+                const prayers = [{n:"الفجر",t:pTimes.Fajr},{n:"الظهر",t:pTimes.Dhuhr},{n:"العصر",t:pTimes.Asr},{n:"المغرب",t:pTimes.Maghrib},{n:"العشاء",t:pTimes.Isha}];
                 let nextP = null; let minDiff = Infinity;
                 prayers.forEach(p => {
-                    const [h, m] = p.t.split(':');
-                    const pDate = new Date(); pDate.setHours(h, m, 0);
-                    if (pDate < now) pDate.setDate(pDate.getDate() + 1);
+                    const [h,m] = p.t.split(':');
+                    const pDate = new Date(); pDate.setHours(h,m,0);
+                    if (pDate < now) pDate.setDate(pDate.getDate()+1);
                     const diff = pDate - now;
                     if (diff < minDiff) { minDiff = diff; nextP = p; }
                 });
                 document.getElementById('next-prayer-name').innerText = nextP.n;
-                const hrs = Math.floor(minDiff / 3600000);
-                const mins = Math.floor((minDiff % 3600000) / 60000);
-                const secs = Math.floor((minDiff % 60000) / 1000);
+                const hrs = Math.floor(minDiff/3600000);
+                const mins = Math.floor((minDiff%3600000)/60000);
+                const secs = Math.floor((minDiff%60000)/1000);
                 document.getElementById('time-left').innerText = `${String(hrs).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
             }
         }
@@ -196,7 +200,7 @@
         getPrayerTimes();
         setInterval(updateClock, 1000);
 
-        // --- قوائم البيانات ---
+        // --- القراء والإذاعات ---
         const readersList = [
             { name: "ماهر المعيقلي", server: "https://server12.mp3quran.net/maher/" },
             { name: "مشاري العفاسي", server: "https://server8.mp3quran.net/afs/" },
@@ -230,17 +234,16 @@
             { name: "الرقية الشرعية", url: "https://backup.qurango.net/radio/roqiah" },
             { name: "تلاوات خاشعة", url: "https://backup.qurango.net/radio/salma" },
             { name: "أذكار الصباح", url: "https://backup.qurango.net/radio/athkar_sabah" },
-            { name: "أذكار المساء", url: "https://backup.qurango.net/radio/athkar_masa" }
+            { name: "أذكار المساء", url: "https://backup.qurango.net/radio/athkar_masa" },
+            { name: "تلاوات قرآنية متنوعة", url: "https://backup.qurango.net/radio/mix_quran" }
         ];
 
         const surahNames = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
 
-        // --- وظائف المودال ---
         function openReadersModal() { document.getElementById('readers-modal').classList.remove('hidden'); }
         function openRadioModal() { document.getElementById('radio-modal').classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
-        // إنشاء قائمة القراء
         const rList = document.getElementById('readers-list');
         readersList.forEach(r => {
             const div = document.createElement('div');
@@ -250,7 +253,6 @@
             rList.appendChild(div);
         });
 
-        // إنشاء قائمة الإذاعات
         const raList = document.getElementById('radio-list');
         radioStations.forEach(s => {
             const div = document.createElement('div');
@@ -275,7 +277,6 @@
             document.getElementById('surah-modal').classList.remove('hidden');
         }
 
-        // --- وظائف التشغيل ---
         function playSurah(id, sName) {
             const num = id.toString().padStart(3, '0');
             audio.src = `${selectedReader.server}${num}.mp3`;
