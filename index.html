@@ -10,11 +10,11 @@
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #0f172a; color: #f8fafc; margin: 0; padding-bottom: 160px; }
         .prayer-card { aspect-ratio: 1 / 1; background: #1e293b; border-radius: 2.5rem; border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
-        .dua-box { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 1.5rem; padding: 15px; margin: 20px auto; max-width: 90%; }
         .grid-item-custom { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); transition: 0.2s; padding: 12px; border-radius: 15px; cursor: pointer; text-align: center; color: white; font-weight: bold; }
         .grid-item-custom:hover { background: #10b981; border-color: #10b981; }
         .prayer-row { border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 10px 0; }
         .prayer-row:last-child { border: none; }
+        .dua-box { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 1.5rem; padding: 15px; margin: 20px auto; max-width: 90%; }
     </style>
 </head>
 <body>
@@ -63,7 +63,7 @@
         </div>
 
         <div class="bg-[#1e293b]/50 rounded-[2.5rem] p-8 border border-white/5 mb-12 shadow-lg">
-            <h3 class="text-center text-gray-400 font-bold text-xs mb-4 uppercase tracking-widest" id="prayer-header">مواقيت الصلاة</h3>
+            <h3 class="text-center text-gray-400 font-bold text-xs mb-4 uppercase tracking-widest" id="prayer-header">جاري تحديد الموقع...</h3>
             
             <div class="flex justify-between items-center mb-6 px-2 border-b border-white/5 pb-4">
                 <div class="text-right">
@@ -72,11 +72,11 @@
                 </div>
                 <div class="text-left">
                     <p class="text-[10px] text-gray-400 uppercase font-bold">الهجري</p>
-                    <span id="hijri-date" class="text-sm font-bold text-amber-500">جاري التحميل...</span>
+                    <span id="hijri-date" class="text-sm font-bold text-amber-500">...</span>
                 </div>
             </div>
 
-            <div class="grid grid-cols-3 gap-6 text-center text-white" id="prayer-grid">
+            <div class="grid grid-cols-3 gap-6 text-center text-white">
                 <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">الفجر</p> <p class="font-black text-emerald-400" id="fajr">-</p> </div>
                 <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">الشروق</p> <p class="font-black" id="sunrise">-</p> </div>
                 <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">الظهر</p> <p class="font-black" id="dhuhr">-</p> </div>
@@ -126,14 +126,12 @@
             <div class="p-6 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-4" id="readers-list"></div>
         </div>
     </div>
-
     <div id="surah-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-[70] hidden flex items-center justify-center p-4">
         <div class="bg-[#1e293b] w-full max-w-4xl max-h-[85vh] rounded-[3rem] border border-white/10 overflow-hidden flex flex-col">
             <div class="p-6 border-b border-white/10 flex justify-between items-center text-white"><h3 class="text-xl font-black" id="surah-title">السور</h3><button onclick="closeModal('surah-modal')" class="text-2xl">✕</button></div>
             <div class="p-6 overflow-y-auto grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2" id="surah-list"></div>
         </div>
     </div>
-
     <div id="radio-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[60] hidden flex items-center justify-center p-4">
         <div class="bg-[#1e293b] w-full max-w-2xl max-h-[80vh] rounded-[3rem] border border-white/10 overflow-hidden flex flex-col shadow-2xl">
             <div class="p-6 border-b border-white/10 flex justify-between items-center text-white"><h3 class="text-xl font-black">اختر إذاعة الشيخ</h3><button onclick="closeModal('radio-modal')" class="text-2xl">✕</button></div>
@@ -146,39 +144,44 @@
     <script>
         const audio = document.getElementById('main-audio');
         let isPlaying = false;
-        let selectedReader = null;
         let pTimes = {};
+        let selectedReader = null;
 
+        // وظيفة جلب المواقيت مع تحويل اسم المحافظة للعربي
         async function getPrayerTimes() {
             try {
-                // 1. جلب اسم المحافظة والموقع
+                // 1. جلب بيانات الموقع
                 const locRes = await fetch('https://ipapi.co/json/');
                 const locData = await locRes.json();
-                const city = locData.city;
-                const { latitude, longitude } = locData;
+                const { latitude, longitude, region } = locData;
 
-                // تحديث العنوان باسم المحافظة
-                document.getElementById('prayer-header').innerText = `مواقيت الصلاة حسب ${city}`;
+                // 2. محاولة جلب اسم المحافظة بالعربي باستخدام خدمة أخرى بسيطة
+                let cityNameAr = region; // افتراضي
+                try {
+                    const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&accept-language=ar`);
+                    const geoData = await geoRes.json();
+                    cityNameAr = geoData.address.state || geoData.address.city || geoData.address.province || region;
+                } catch(e) { console.log("Translation error"); }
 
-                // 2. جلب مواقيت الصلاة والتاريخ الهجري
+                document.getElementById('prayer-header').innerText = `مواقيت الصلاة حسب ${cityNameAr}`;
+
+                // 3. جلب المواقيت والتاريخ الهجري
                 const prayRes = await fetch(`https://api.aladhan.com/v1/timings?latitude=${latitude}&longitude=${longitude}&method=5`);
                 const prayData = await prayRes.json();
                 pTimes = prayData.data.timings;
                 
-                // عرض التاريخ الهجري من الـ API ليكون دقيقاً
-                const hijri = prayData.data.date.hijri;
-                document.getElementById('hijri-date').innerText = `${hijri.day} ${hijri.month.ar} ${hijri.year}`;
+                const hj = prayData.data.date.hijri;
+                document.getElementById('hijri-date').innerText = `${hj.day} ${hj.month.ar} ${hj.year}`;
 
-                // عرض المواقيت في الجدول
-                document.getElementById('fajr').innerText = convertTo12h(pTimes.Fajr);
-                document.getElementById('sunrise').innerText = convertTo12h(pTimes.Sunrise);
-                document.getElementById('dhuhr').innerText = convertTo12h(pTimes.Dhuhr);
-                document.getElementById('asr').innerText = convertTo12h(pTimes.Asr);
-                document.getElementById('maghrib').innerText = convertTo12h(pTimes.Maghrib);
-                document.getElementById('isha').innerText = convertTo12h(pTimes.Isha);
+                // ملء الجدول
+                const ids = ['fajr','sunrise','dhuhr','asr','maghrib','isha'];
+                const keys = ['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];
+                ids.forEach((id, i) => {
+                    document.getElementById(id).innerText = convertTo12h(pTimes[keys[i]]);
+                });
 
             } catch (error) {
-                console.log("Error", error);
+                document.getElementById('prayer-header').innerText = "مواقيت الصلاة";
             }
         }
 
@@ -191,10 +194,7 @@
 
         function updateClock() {
             const now = new Date();
-            // التاريخ الميلادي
             document.getElementById('gregorian-date').innerText = now.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' });
-            
-            // الوقت المباشر
             document.getElementById('live-clock').innerText = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }).replace('AM', 'ص').replace('PM', 'م');
 
             if (pTimes.Fajr) {
@@ -229,7 +229,6 @@
             { name: "محمد صديق المنشاوي", server: "https://server10.mp3quran.net/minsh/Mojawwad/" },
             { name: "محمود خليل الحصري", server: "https://server8.mp3quran.net/hussary/" },
             { name: "ياسر الدوسري", server: "https://server11.mp3quran.net/yasser/" },
-            { name: "أحمد العجمي", server: "https://server10.mp3quran.net/ajm/" },
             { name: "فارس عباد", server: "https://server8.mp3quran.net/frs_a/" }
         ];
 
@@ -237,7 +236,6 @@
             { name: "إذاعة القاهرة", url: "https://backup.qurango.net/radio/ertu_main" },
             { name: "إذاعة ماهر المعيقلي", url: "https://backup.qurango.net/radio/maher_al_moaikli" },
             { name: "إذاعة مشاري العفاسي", url: "https://backup.qurango.net/radio/mishary_alafasi" },
-            { name: "إذاعة الحصري", url: "https://backup.qurango.net/radio/mahmoud_khalil_alhussary" },
             { name: "إذاعة ياسر الدوسري", url: "https://backup.qurango.net/radio/yasser_aldosari" }
         ];
 
