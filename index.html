@@ -9,11 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #0f172a; color: #f8fafc; margin: 0; padding-bottom: 160px; }
-        .surah-item:hover { background: rgba(16, 185, 129, 0.2); transform: scale(1.02); }
+        .main-card { background: #1e293b; border-radius: 2.5rem; border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s ease; cursor: pointer; }
+        .main-card:hover { transform: translateY(-5px); border-color: #10b981; box-shadow: 0 20px 40px -15px rgba(16, 185, 129, 0.2); }
         .dua-box { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 1.5rem; padding: 15px; margin: 20px auto; max-width: 90%; }
+        .modal-bg { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(15px); }
         input[type="range"] { accent-color: #10b981; }
-        .reader-card { background: #1e293b; border-radius: 2rem; border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s ease; }
-        .reader-card:hover { border-color: #10b981; transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.3); }
     </style>
 </head>
 <body>
@@ -21,73 +21,84 @@
     <header class="bg-[#1e293b]/90 backdrop-blur-md sticky top-0 z-50 border-b border-white/5">
         <div class="container mx-auto px-4 h-20 flex items-center justify-between">
             <h1 class="text-xl font-extrabold text-white">القرآن الكريم</h1>
-            <a href="https://t.me/Sar7an_1" target="_blank" class="flex items-center gap-2 bg-blue-500/10 px-3 py-2 rounded-xl border border-blue-500/20 text-blue-400">
-                <i class="fa-solid fa-paper-plane"></i>
-                <span class="text-xs font-bold">تليجرام</span>
-            </a>
+            <div id="date-display" class="text-[10px] text-emerald-500 font-bold">20/فبراير/2026</div>
         </div>
     </header>
 
     <main class="container mx-auto px-4 py-8">
         <div class="mb-10 rounded-[2.5rem] bg-gradient-to-br from-emerald-800 to-teal-950 p-8 shadow-2xl border border-white/10">
             <div class="flex flex-col md:flex-row items-center gap-8">
-                <div onclick="togglePlay()" class="w-36 h-36 md:w-44 md:h-44 rounded-full bg-white/10 border-4 border-white/20 flex items-center justify-center cursor-pointer shadow-2xl">
+                <div onclick="togglePlay()" class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-white/10 border-4 border-white/20 flex items-center justify-center cursor-pointer shadow-inner">
                     <div id="play-state-icon" class="text-5xl text-white"><i class="fa-solid fa-play ml-1"></i></div>
                 </div>
                 <div class="text-center md:text-right text-white">
                     <span id="player-status" class="bg-emerald-500/20 px-4 py-1 rounded-full text-[10px] font-bold border border-emerald-500/30">جاهز للإستماع</span>
-                    <h2 id="current-name" class="text-3xl md:text-5xl font-black mt-4 mb-2">اختر قارئاً</h2>
-                    <p id="current-surah" class="text-lg opacity-70">المصحف المرتل كاملاً</p>
+                    <h2 id="current-name" class="text-2xl md:text-4xl font-black mt-4 mb-2">اختر ما تود سماعه</h2>
+                    <p id="current-detail" class="text-lg opacity-70">إذاعات بث مباشر ومصاحف كاملة</p>
                 </div>
             </div>
         </div>
 
-        <h3 class="text-2xl font-black mb-8 text-white flex items-center gap-3">
-            <span class="w-2 h-8 bg-emerald-500 rounded-full"></span>
-            كبار القراء والمشايخ
-        </h3>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12" id="readers-grid">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            <div onclick="openRadioModal()" class="main-card p-8 flex flex-col items-center text-center">
+                <div class="w-20 h-20 bg-emerald-500/10 rounded-3xl flex items-center justify-center text-emerald-500 text-4xl mb-6">
+                    <i class="fa-solid fa-tower-broadcast"></i>
+                </div>
+                <h3 class="text-2xl font-black text-white mb-2">إذاعة القراء</h3>
+                <p class="text-gray-400 text-sm">بث مباشر يعمل على مدار الساعة</p>
             </div>
+
+            <div onclick="openReadersModal()" class="main-card p-8 flex flex-col items-center text-center">
+                <div class="w-20 h-20 bg-blue-500/10 rounded-3xl flex items-center justify-center text-blue-500 text-4xl mb-6">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+                <h3 class="text-2xl font-black text-white mb-2">المصحف المرتل</h3>
+                <p class="text-gray-400 text-sm">11 شيخاً بالمصحف الكامل (114 سورة)</p>
+            </div>
+        </div>
 
         <div class="text-center mb-40">
             <p class="font-bold text-sm text-emerald-500 opacity-90">sar7an_1 ©[2026-2027]</p>
             <div class="dua-box">
                 <p class="text-emerald-400 text-lg font-bold">رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ</p>
-                <p class="text-[10px] text-gray-500 mt-1 italic">صدقة جارية</p>
             </div>
         </div>
     </main>
 
-    <div id="surah-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[70] hidden flex flex-col">
-        <div class="sticky top-0 bg-[#1e293b] p-6 border-b border-white/10 z-10">
-            <div class="container mx-auto flex justify-between items-center text-white">
-                <div>
-                    <h3 class="text-2xl font-black text-emerald-400" id="modal-reader-name">القارئ</h3>
-                    <p class="text-xs opacity-60">اختر السورة التي تود سماعها</p>
-                </div>
-                <button onclick="closeSurahModal()" class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-2xl hover:bg-red-500/20 transition-all">✕</button>
-            </div>
+    <div id="readers-modal" class="fixed inset-0 modal-bg z-[60] hidden flex flex-col p-6">
+        <div class="container mx-auto flex justify-between items-center mb-8 text-white">
+            <h3 class="text-2xl font-black text-emerald-500">اختر الشيخ</h3>
+            <button onclick="closeModal('readers-modal')" class="text-3xl">✕</button>
         </div>
-        <div class="flex-1 overflow-y-auto p-4">
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 container mx-auto pb-10" id="surah-list">
-                </div>
-        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 overflow-y-auto container mx-auto pb-10" id="readers-list"></div>
     </div>
 
-    <div class="fixed bottom-0 left-0 right-0 bg-[#1e293b]/95 backdrop-blur-xl p-6 z-50 border-t border-white/10 shadow-2xl">
+    <div id="surah-modal" class="fixed inset-0 modal-bg z-[70] hidden flex flex-col p-6">
+        <div class="container mx-auto flex justify-between items-center mb-8 text-white">
+            <h3 class="text-2xl font-black text-emerald-500" id="selected-reader-title">السور</h3>
+            <button onclick="closeModal('surah-modal')" class="text-3xl">✕</button>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-6 gap-3 overflow-y-auto container mx-auto pb-10" id="surah-list"></div>
+    </div>
+
+    <div id="radio-modal" class="fixed inset-0 modal-bg z-[60] hidden flex flex-col p-6">
+        <div class="container mx-auto flex justify-between items-center mb-8 text-white">
+            <h3 class="text-2xl font-black text-emerald-500">إذاعات البث المباشر</h3>
+            <button onclick="closeModal('radio-modal')" class="text-3xl">✕</button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 container mx-auto" id="radio-list"></div>
+    </div>
+
+    <div class="fixed bottom-0 left-0 right-0 bg-[#1e293b]/95 p-6 z-50 border-t border-white/10">
         <div class="container mx-auto flex items-center justify-between">
-            <div class="flex-1 truncate max-w-[200px]">
-                <p id="mini-name" class="font-black text-white text-sm md:text-base truncate">القرآن الكريم</p>
-                <p id="mini-surah" class="text-[10px] text-emerald-500 font-bold uppercase tracking-wider">اختر سورة</p>
+            <div class="flex-1 truncate">
+                <p id="mini-name" class="font-black text-white">القرآن الكريم</p>
+                <p id="mini-detail" class="text-[10px] text-emerald-500 uppercase">جاهز للتشغيل</p>
             </div>
-            <button onclick="togglePlay()" class="w-16 h-16 bg-emerald-600 text-white rounded-full -mt-12 border-[6px] border-[#0f172a] shadow-xl hover:scale-105 transition-all">
-                <i id="mini-play-icon" class="fa-solid fa-play text-xl"></i>
+            <button onclick="togglePlay()" class="w-16 h-16 bg-emerald-600 text-white rounded-full -mt-12 border-[6px] border-[#0f172a] shadow-xl">
+                <i id="mini-play-icon" class="fa-solid fa-play"></i>
             </button>
-            <div class="flex-1 flex justify-end gap-2 items-center">
-                <i class="fa-solid fa-volume-low text-xs text-emerald-500"></i>
-                <input type="range" min="0" max="1" step="0.1" value="0.8" oninput="audio.volume=this.value" class="w-20 md:w-32 h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer">
-            </div>
+            <input type="range" min="0" max="1" step="0.1" value="0.8" oninput="audio.volume=this.value" class="w-20 md:w-32">
         </div>
     </div>
 
@@ -98,7 +109,7 @@
         let isPlaying = false;
         let selectedReader = null;
 
-        // قائمة القراء المحدثة
+        // قائمة الـ 11 شيخ (المصحف المرتل)
         const readers = [
             { name: "ماهر المعيقلي", server: "https://server12.mp3quran.net/maher/" },
             { name: "مشاري العفاسي", server: "https://server8.mp3quran.net/afs/" },
@@ -110,82 +121,80 @@
             { name: "ناصر القطامي", server: "https://server6.mp3quran.net/qtm/" },
             { name: "فارس عباد", server: "https://server8.mp3quran.net/frs_a/" },
             { name: "إدريس أبكر", server: "https://server6.mp3quran.net/abkr/" },
-            { name: "محمود علي البنا", server: "https://server8.mp3quran.net/banna/Mojawwad/" }
+            { name: "أحمد العجمي", server: "https://server10.mp3quran.net/ajm/" }
         ];
 
-        const surahs = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبيـاء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
+        // قائمة الإذاعات (بث مباشر)
+        const radios = [
+            { name: "إذاعة القرآن الكريم - القاهرة", url: "https://backup.qurango.net/radio/ertu_main" },
+            { name: "إذاعة تكبيرات العيد", url: "https://backup.qurango.net/radio/eid" },
+            { name: "إذاعة القراءات العشر", url: "https://backup.qurango.net/radio/ahmad_al3ajmy_p_warsh" },
+            { name: "إذاعة الرقية الشرعية", url: "https://backup.qurango.net/radio/roqia" }
+        ];
 
-        const grid = document.getElementById('readers-grid');
-        readers.forEach(r => {
-            const d = document.createElement('div');
-            d.className = "reader-card p-6 cursor-pointer group";
-            d.innerHTML = `
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-all">
-                        <i class="fa-solid fa-microphone-lines"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-black text-lg text-white">${r.name}</h4>
-                        <p class="text-gray-500 text-xs font-bold">114 سورة (مصحف كامل)</p>
-                    </div>
-                </div>
-            `;
-            d.onclick = () => openSurahModal(r);
-            grid.appendChild(d);
-        });
+        const surahs = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
+
+        function openReadersModal() {
+            const list = document.getElementById('readers-list');
+            list.innerHTML = '';
+            readers.forEach(r => {
+                const d = document.createElement('div');
+                d.className = "p-5 bg-white/5 hover:bg-emerald-600 rounded-2xl cursor-pointer text-white font-bold transition-all text-center";
+                d.innerText = r.name;
+                d.onclick = () => openSurahModal(r);
+                list.appendChild(d);
+            });
+            document.getElementById('readers-modal').classList.remove('hidden');
+        }
 
         function openSurahModal(reader) {
             selectedReader = reader;
-            document.getElementById('modal-reader-name').innerText = `الشيخ ${reader.name}`;
+            document.getElementById('selected-reader-title').innerText = `مصحف ${reader.name}`;
             const list = document.getElementById('surah-list');
             list.innerHTML = '';
-            surahs.forEach((s, index) => {
-                const num = (index + 1).toString().padStart(3, '0');
+            surahs.forEach((s, i) => {
+                const num = (i + 1).toString().padStart(3, '0');
                 const item = document.createElement('div');
-                item.className = "p-3 bg-white/5 rounded-xl text-white font-bold cursor-pointer surah-item transition-all text-center text-sm border border-white/5";
-                item.innerHTML = `<span class="block text-[10px] opacity-40 mb-1">${num}</span> ${s}`;
-                item.onclick = () => playSurah(num, s);
+                item.className = "p-3 bg-white/5 rounded-xl text-white text-center cursor-pointer hover:bg-emerald-500 text-sm";
+                item.innerText = s;
+                item.onclick = () => { playSound(reader.server + num + ".mp3", reader.name, "سورة " + s); closeModal('surah-modal'); closeModal('readers-modal'); };
                 list.appendChild(item);
             });
             document.getElementById('surah-modal').classList.remove('hidden');
         }
 
-        function closeSurahModal() { document.getElementById('surah-modal').classList.add('hidden'); }
+        function openRadioModal() {
+            const list = document.getElementById('radio-list');
+            list.innerHTML = '';
+            radios.forEach(r => {
+                const d = document.createElement('div');
+                d.className = "p-5 bg-white/5 hover:bg-emerald-600 rounded-2xl cursor-pointer text-white font-bold transition-all";
+                d.innerText = r.name;
+                d.onclick = () => { playSound(r.url, r.name, "بث مباشر"); closeModal('radio-modal'); };
+                list.appendChild(d);
+            });
+            document.getElementById('radio-modal').classList.remove('hidden');
+        }
 
-        function playSurah(num, name) {
-            const url = `${selectedReader.server}${num}.mp3`;
+        function playSound(url, name, detail) {
+            audio.pause();
             audio.src = url;
             audio.load();
-            audio.oncanplay = () => {
-                audio.play();
-                isPlaying = true;
-                updateIcons(true);
-                document.getElementById('player-status').innerText = 'جاري الإستماع الآن';
-            };
-            document.getElementById('current-name').innerText = selectedReader.name;
-            document.getElementById('current-surah').innerText = `سورة ${name}`;
-            document.getElementById('mini-name').innerText = selectedReader.name;
-            document.getElementById('mini-surah').innerText = `سورة ${name}`;
-            closeSurahModal();
+            audio.oncanplay = () => { audio.play(); isPlaying = true; updateIcons(true); };
+            document.getElementById('current-name').innerText = name;
+            document.getElementById('current-detail').innerText = detail;
+            document.getElementById('mini-name').innerText = name;
+            document.getElementById('mini-detail').innerText = detail;
+            document.getElementById('player-status').innerText = 'يتم التشغيل الآن';
         }
 
-        function togglePlay() { 
-            if(!audio.src) return;
-            isPlaying ? pauseAudio() : playAudio(); 
-        }
-        function playAudio() { audio.play(); isPlaying = true; updateIcons(true); }
-        function pauseAudio() { audio.pause(); isPlaying = false; updateIcons(false); }
-
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function togglePlay() { if(!audio.src) return; isPlaying ? (audio.pause(), isPlaying=false, updateIcons(false)) : (audio.play(), isPlaying=true, updateIcons(true)); }
+        
         function updateIcons(play) {
             const pi = document.getElementById('play-state-icon');
             const mi = document.getElementById('mini-play-icon');
-            pi.innerHTML = play ? `
-                <div class="flex items-end gap-1.5 h-10">
-                    <div class="w-2 bg-white animate-bounce h-full"></div>
-                    <div class="w-2 bg-white animate-bounce h-3/4" style="animation-delay:0.1s"></div>
-                    <div class="w-2 bg-white animate-bounce h-1/2" style="animation-delay:0.2s"></div>
-                    <div class="w-2 bg-white animate-bounce h-full" style="animation-delay:0.3s"></div>
-                </div>` : '<i class="fa-solid fa-play ml-1"></i>';
+            pi.innerHTML = play ? '<div class="flex items-end gap-1.5 h-10"><div class="w-2 bg-white animate-bounce h-full"></div><div class="w-2 bg-white animate-bounce h-2/3"></div><div class="w-2 bg-white animate-bounce h-full"></div></div>' : '<i class="fa-solid fa-play ml-1"></i>';
             mi.className = play ? "fa-solid fa-pause" : "fa-solid fa-play";
         }
     </script>
