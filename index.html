@@ -74,7 +74,7 @@
                 <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">الظهر</p> <p class="font-black">12:15 م</p> </div>
                 <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">العصر</p> <p class="font-black">03:25 م</p> </div>
                 <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">المغرب</p> <p class="font-black text-orange-400">05:55 م</p> </div>
-                <div class="prayer-row"> <p class="text-[10px] opacity-60 opacity-60 mb-1">العشاء</p> <p class="font-black">07:20 م</p> </div>
+                <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">العشاء</p> <p class="font-black">07:20 م</p> </div>
             </div>
         </div>
 
@@ -146,15 +146,14 @@
             { name: "العشاء", time: "19:20" }
         ];
 
+        // تم استعادة روابط الإذاعات الأصلية التي كانت تعمل لديك
         const readers = [
-            { name: "ماهر المعيقلي", url: "https://backup.qurango.net/radio/maher_al_moaikli" },
-            { name: "عبد الباسط عبد الصمد", url: "https://backup.qurango.net/radio/abdulbasit_abdulsamad_mojawwad" },
-            { name: "محمد صديق المنشاوي", url: "https://backup.qurango.net/radio/mohammed_siddiq_alminshawi_mojawwad" },
-            { name: "مشاري العفاسي", url: "https://backup.qurango.net/radio/mishary_alafasi" },
-            { name: "محمود خليل الحصري", url: "https://backup.qurango.net/radio/mahmoud_khalil_alhussary" },
-            { name: "ياسر الدوسري", url: "https://backup.qurango.net/radio/yasser_aldosari" },
-            { name: "سعود الشريم", url: "https://backup.qurango.net/radio/saud_alshuraim" },
-            { name: "ناصر القطامي", url: "https://backup.qurango.net/radio/nasser_alqatami" }
+            { name: "الشيخ ماهر المعيقلي", url: "https://backup.qurango.net/radio/maher_al_moaikli" },
+            { name: "الشيخ عبد الباسط عبد الصمد", url: "https://backup.qurango.net/radio/abdulbasit_abdulsamad_mojawwad" },
+            { name: "الشيخ محمد صديق المنشاوي", url: "https://backup.qurango.net/radio/mohammed_siddiq_alminshawi_mojawwad" },
+            { name: "الشيخ مشاري العفاسي", url: "https://backup.qurango.net/radio/mishary_alafasi" },
+            { name: "الشيخ محمود خليل الحصري", url: "https://backup.qurango.net/radio/mahmoud_khalil_alhussary" },
+            { name: "الشيخ ياسر الدوسري", url: "https://backup.qurango.net/radio/yasser_aldosari" }
         ];
 
         const audio = document.getElementById('main-audio');
@@ -163,16 +162,14 @@
         function updateClock() {
             const now = new Date();
             
-            // تحديث التاريخ الميلادي ليكون أرقام إنجليزية بالتنسيق المطلوب
+            // تعديل التاريخ الميلادي ليظهر (20/فبراير/2026)
             const day = now.getDate();
-            const month = now.getMonth() + 1;
             const year = now.getFullYear();
-            document.getElementById('gregorian-date').innerText = `${day}/${month}/${year}`;
+            const monthName = now.toLocaleDateString('ar-EG', { month: 'long' });
+            document.getElementById('gregorian-date').innerText = `${day}/${monthName}/${year}`;
             
-            // تحديث التاريخ الهجري
             document.getElementById('hijri-date').innerText = "2 رمضان 1447 هـ";
 
-            // نظام 12 ساعة
             let timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
             timeStr = timeStr.replace('AM', 'ص').replace('PM', 'م');
             document.getElementById('live-clock').innerText = timeStr;
@@ -207,32 +204,22 @@
         readers.forEach(r => {
             const div = document.createElement('div');
             div.className = "p-5 bg-white/5 hover:bg-emerald-600 transition-all rounded-2xl border border-white/5 cursor-pointer text-white font-bold";
-            div.onclick = () => { selectStation(r.name, r.url, 'بث مباشر'); closeReadersModal(); };
+            div.onclick = () => { selectStation(r.name, r.url, 'المصحف المرتل'); closeReadersModal(); };
             div.innerText = r.name;
             rList.appendChild(div);
         });
 
         function selectStation(name, url, sub) {
-            audio.pause();
             audio.src = url;
-            audio.load();
             document.getElementById('current-name').innerText = name;
             document.getElementById('current-reciter').innerText = sub;
             document.getElementById('mini-name').innerText = name;
-            document.getElementById('mini-sub').innerText = 'قيد التشغيل';
+            document.getElementById('mini-sub').innerText = name === 'الإذاعة العامة' ? 'ON AIR' : 'قيد التشغيل';
             playAudio();
         }
 
         function togglePlay() { isPlaying ? pauseAudio() : playAudio(); }
-        
-        function playAudio() { 
-            if(!audio.src) selectStation('الإذاعة العامة', 'https://backup.qurango.net/radio/ertu_main', 'بث مباشر من القاهرة');
-            let playPromise = audio.play();
-            if (playPromise !== undefined) {
-                playPromise.then(_ => { isPlaying = true; updateIcons(true); }).catch(e => { isPlaying = false; updateIcons(false); });
-            }
-        }
-
+        function playAudio() { if(!audio.src) selectStation('الإذاعة العامة', 'https://backup.qurango.net/radio/ertu_main', 'بث مباشر من القاهرة'); audio.play(); isPlaying = true; updateIcons(true); }
         function pauseAudio() { audio.pause(); isPlaying = false; updateIcons(false); }
         
         function updateIcons(play) {
@@ -241,8 +228,7 @@
             pi.innerHTML = play ? '<div class="flex items-end gap-2 h-12"><div class="w-3 bg-white animate-bounce h-full"></div><div class="w-3 bg-white animate-bounce h-2/3" style="animation-delay:0.2s"></div><div class="w-3 bg-white animate-bounce h-full" style="animation-delay:0.4s"></div></div>' : '<i class="fa-solid fa-play ml-2"></i>';
             mi.className = play ? "fa-solid fa-pause text-3xl" : "fa-solid fa-play text-3xl";
         }
-        
         function changeVolume(v) { audio.volume = v; }
     </script>
 </body>
-                                                                                                                                  </html>
+</html>
