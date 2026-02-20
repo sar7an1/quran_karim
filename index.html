@@ -7,31 +7,32 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { darkMode: 'class' }
+    </script>
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #0f172a; color: white; transition: 0.3s; }
+        body { font-family: 'Tajawal', sans-serif; transition: 0.3s; }
+        .dark body { background-color: #0f172a; color: white; }
+        .light body { background-color: #f8fafc; color: #1e293b; }
         .prayer-card { aspect-ratio: 1 / 1; }
         .player-text-shadow { text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body class="pb-44">
 
-    <header class="bg-[#1e293b]/90 backdrop-blur-md sticky top-0 z-50 border-b border-white/5">
+    <header class="bg-[#1e293b]/90 dark:bg-slate-900/90 backdrop-blur-md sticky top-0 z-50 border-b border-white/5">
         <div class="container mx-auto px-4 h-20 flex items-center justify-between">
             <div class="flex items-center gap-2">
                 <a href="https://t.me/Sar7an_1" target="_blank" class="flex flex-col items-center justify-center w-14 h-14 bg-blue-500/10 text-blue-400 rounded-2xl border border-blue-500/20 shadow-lg">
                     <i class="fa-solid fa-paper-plane text-lg"></i>
                     <span class="text-[10px] font-bold mt-1">تليجرام</span>
                 </a>
-                <a href="https://wa.me/201234567890" target="_blank" class="flex flex-col items-center justify-center w-14 h-14 bg-emerald-500/10 text-emerald-400 rounded-2xl border border-emerald-500/20 shadow-lg">
-                    <i class="fa-solid fa-comment-dots text-lg"></i>
-                    <span class="text-[10px] font-bold mt-1">تواصل</span>
-                </a>
             </div>
 
-            <h1 class="text-xl font-extrabold tracking-tight">إذاعة القرآن الكريم</h1>
+            <h1 class="text-xl font-extrabold tracking-tight text-white">إذاعة القرآن الكريم</h1>
 
-            <button onclick="document.documentElement.classList.toggle('dark')" class="w-12 h-12 flex items-center justify-center bg-white/5 rounded-2xl border border-white/10">
-                <i class="fa-solid fa-moon text-amber-400"></i>
+            <button onclick="toggleDarkMode()" class="w-12 h-12 flex items-center justify-center bg-white/5 rounded-2xl border border-white/10 transition-transform active:scale-90">
+                <i id="theme-icon" class="fa-solid fa-moon text-amber-400"></i>
             </button>
         </div>
     </header>
@@ -44,62 +45,61 @@
                         <i class="fa-solid fa-play ml-2"></i>
                     </div>
                 </div>
-                <div class="text-center md:text-right">
+                <div class="text-center md:text-right text-white">
                     <span class="bg-emerald-500/20 px-4 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase border border-white/10">بث مباشر الآن</span>
-                    <h2 id="current-name" class="text-4xl md:text-6xl font-black mt-4 mb-2">الإذاعة العامة</h2>
-                    <p id="current-reciter" class="text-xl opacity-70">بث مباشر من القاهرة</p>
+                    <h2 id="current-name" class="text-3xl md:text-5xl font-black mt-4 mb-2 leading-tight">الإذاعة العامة</h2>
+                    <p id="current-reciter" class="text-lg opacity-70">بث مباشر من القاهرة</p>
                 </div>
             </div>
         </div>
 
         <div class="grid grid-cols-2 gap-4 mb-8">
-            <div class="bg-[#1e293b] rounded-[2.5rem] p-6 border border-white/5 flex flex-col items-center justify-center text-center prayer-card">
+            <div class="bg-[#1e293b] dark:bg-slate-800 rounded-[2.5rem] p-6 border border-white/5 flex flex-col items-center justify-center text-center prayer-card shadow-xl">
                 <i class="fa-solid fa-hourglass-start text-amber-500 text-2xl mb-2"></i>
                 <span class="text-[10px] text-gray-400 font-bold uppercase">متبقي لصلاة الفجر</span>
                 <div id="time-left" class="text-2xl font-black mt-1 text-white">02:45:10</div>
             </div>
-            <div class="bg-[#1e293b] rounded-[2.5rem] p-6 border border-white/5 flex flex-col items-center justify-center text-center prayer-card">
+            <div class="bg-[#1e293b] dark:bg-slate-800 rounded-[2.5rem] p-6 border border-white/5 flex flex-col items-center justify-center text-center prayer-card shadow-xl">
                 <i class="fa-solid fa-clock text-emerald-500 text-2xl mb-2"></i>
                 <span class="text-[10px] text-gray-400 font-bold uppercase">الوقت الآن</span>
                 <div id="current-time-12" class="text-2xl font-black mt-1 text-white">--:--</div>
             </div>
         </div>
 
-        <div class="bg-[#1e293b]/40 rounded-[2.5rem] p-8 border border-white/5 mb-12 shadow-inner">
-            <h3 class="text-center text-gray-400 font-bold text-xs mb-8 uppercase tracking-widest">مواقيت الصلاة بتوقيتك المحلي</h3>
-            <div class="grid grid-cols-3 gap-8 text-center">
-                <div><p class="text-[10px] text-gray-500 mb-1">الفجر</p><p class="font-bold text-emerald-400 text-lg">05:10</p></div>
-                <div><p class="text-[10px] text-gray-500 mb-1">الشروق</p><p class="font-bold text-lg">06:40</p></div>
-                <div><p class="text-[10px] text-gray-500 mb-1">الظهر</p><p class="font-bold text-lg">12:15</p></div>
-                <div><p class="text-[10px] text-gray-500 mb-1">العصر</p><p class="font-bold text-lg">03:25</p></div>
-                <div><p class="text-[10px] text-gray-500 mb-1">المغرب</p><p class="font-bold text-lg">05:55</p></div>
-                <div><p class="text-[10px] text-gray-500 mb-1">العشاء</p><p class="font-bold text-lg">07:20</p></div>
-            </div>
-        </div>
-
-        <h3 class="text-2xl font-black mb-8 flex items-center gap-3">
+        <h3 class="text-2xl font-black mb-8 flex items-center gap-3 dark:text-white">
             <span class="w-2 h-8 bg-emerald-600 rounded-full"></span>
             اختر القناة
         </h3>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6" id="stations-grid">
-            <div onclick="selectStation(0)" class="p-10 bg-[#1e293b] rounded-[3rem] border-2 border-transparent hover:border-emerald-600 transition-all cursor-pointer group shadow-xl relative overflow-hidden">
-                <div class="w-20 h-20 rounded-[2rem] bg-gradient-to-br from-emerald-600 to-teal-900 text-white flex items-center justify-center shadow-lg mb-6 group-hover:rotate-6 transition-transform">
-                    <i class="fa-solid fa-tower-broadcast text-3xl"></i>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div onclick="selectMainStation()" class="p-8 bg-[#1e293b] rounded-[3rem] border-2 border-transparent hover:border-emerald-600 transition-all cursor-pointer group shadow-xl">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-900 text-white flex items-center justify-center shadow-lg mb-6 group-hover:rotate-6 transition-transform">
+                    <i class="fa-solid fa-tower-broadcast text-2xl"></i>
                 </div>
-                <h4 class="font-black text-2xl mb-2">الإذاعة العامة</h4>
-                <p class="text-gray-500 font-bold italic">بث القاهرة المباشر</p>
+                <h4 class="font-black text-xl mb-1 text-white">الإذاعة العامة</h4>
+                <p class="text-gray-500 text-sm italic font-bold">بث القاهرة المباشر</p>
             </div>
 
-            <div onclick="selectStation(1)" class="p-10 bg-[#1e293b] rounded-[3rem] border-2 border-transparent hover:border-blue-600 transition-all cursor-pointer group shadow-xl relative overflow-hidden">
-                <div class="w-20 h-20 rounded-[2rem] bg-gradient-to-br from-blue-600 to-indigo-900 text-white flex items-center justify-center shadow-lg mb-6 group-hover:-rotate-6 transition-transform">
-                    <i class="fa-solid fa-users-rectangle text-3xl"></i>
+            <div onclick="openReadersModal()" class="p-8 bg-[#1e293b] rounded-[3rem] border-2 border-transparent hover:border-blue-600 transition-all cursor-pointer group shadow-xl">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-900 text-white flex items-center justify-center shadow-lg mb-6 group-hover:-rotate-6 transition-transform">
+                    <i class="fa-solid fa-users-rectangle text-2xl"></i>
                 </div>
-                <h4 class="font-black text-2xl mb-2">إذاعة القراء</h4>
-                <p class="text-gray-500 font-bold italic">تضم جميع مشاهير القراء</p>
+                <h4 class="font-black text-xl mb-1 text-white">إذاعة القراء</h4>
+                <p class="text-gray-500 text-sm italic font-bold">اختر قارئك المفضل</p>
             </div>
         </div>
     </main>
+
+    <div id="readers-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[60] hidden flex items-center justify-center p-4">
+        <div class="bg-[#1e293b] w-full max-w-2xl max-h-[80vh] rounded-[3rem] border border-white/10 overflow-hidden flex flex-col shadow-2xl">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-[#1e293b]">
+                <h3 class="text-xl font-black text-white">قائمة القراء</h3>
+                <button onclick="closeReadersModal()" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-4" id="readers-list">
+                </div>
+        </div>
+    </div>
 
     <footer class="container mx-auto px-4 py-20 text-center border-t border-white/5">
         <p class="font-black text-2xl tracking-tighter text-emerald-500 mb-4">sar7an_1 ©[2026-2027]</p>
@@ -108,25 +108,25 @@
         </div>
     </footer>
 
-    <div class="fixed bottom-0 left-0 right-0 bg-[#1e293b]/95 backdrop-blur-3xl border-t border-white/10 p-6 z-50">
+    <div class="fixed bottom-0 left-0 right-0 bg-[#1e293b]/95 dark:bg-slate-900/95 backdrop-blur-3xl border-t border-white/10 p-6 z-50">
         <div class="container mx-auto flex items-center justify-between">
-            <div class="flex items-center gap-4 w-1/3 min-w-0">
+            <div class="flex items-center gap-4 flex-1 min-w-0">
                 <div class="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-2xl shrink-0">
                     <i class="fa-solid fa-microphone-lines text-xl"></i>
                 </div>
-                <div class="truncate">
-                    <p id="mini-name" class="font-black text-xl player-text-shadow truncate">الإذاعة العامة</p>
-                    <p class="text-xs text-emerald-500 font-bold tracking-widest uppercase">On Air</p>
+                <div class="truncate pr-2">
+                    <p id="mini-name" class="font-black text-lg md:text-xl text-white player-text-shadow truncate">الإذاعة العامة</p>
+                    <p id="mini-sub" class="text-[10px] text-emerald-500 font-bold tracking-widest uppercase">On Air</p>
                 </div>
             </div>
 
-            <button onclick="togglePlay()" class="w-24 h-24 bg-emerald-600 text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all -mt-16 border-[8px] border-[#0f172a]">
+            <button onclick="togglePlay()" class="w-24 h-24 bg-emerald-600 text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all -mt-16 border-[8px] border-[#0f172a] dark:border-slate-900">
                 <i id="mini-play-icon" class="fa-solid fa-play text-4xl"></i>
             </button>
 
-            <div class="flex items-center justify-end gap-3 w-1/3">
+            <div class="flex items-center justify-end gap-3 flex-1">
                 <i class="fa-solid fa-volume-high text-emerald-500 hidden sm:block text-xl"></i>
-                <input type="range" min="0" max="1" step="0.1" value="0.8" oninput="changeVolume(this.value)" class="w-24 md:w-40 h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                <input type="range" min="0" max="1" step="0.1" value="0.8" oninput="changeVolume(this.value)" class="w-20 md:w-40 h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-emerald-500">
             </div>
         </div>
     </div>
@@ -134,35 +134,63 @@
     <audio id="main-audio"></audio>
 
     <script>
-        const stations = [
-            { id: 1, name: "الإذاعة العامة", reciter: "بث القاهرة الرئيسي", url: "https://n04.radiojar.com/8s9u67z8n0quv", color: "from-emerald-800 to-teal-950" },
-            { id: 2, name: "إذاعة القراء", reciter: "تلاوات مجمعة لمشاهير القراء", url: "https://backup.qurango.net/radio/mix", color: "from-blue-800 to-indigo-950" }
+        const readers = [
+            { name: "الشيخ ماهر المعيقلي", url: "https://backup.qurango.net/radio/maher_al_moaikli" },
+            { name: "الشيخ عبد الباسط عبد الصمد", url: "https://backup.qurango.net/radio/abdulbasit_abdulsamad_mojawwad" },
+            { name: "الشيخ محمد صديق المنشاوي", url: "https://backup.qurango.net/radio/mohammed_siddiq_alminshawi_mojawwad" },
+            { name: "الشيخ مشاري العفاسي", url: "https://backup.qurango.net/radio/mishary_alafasi" },
+            { name: "الشيخ محمود خليل الحصري", url: "https://backup.qurango.net/radio/mahmoud_khalil_alhussary" },
+            { name: "الشيخ ياسر الدوسري", url: "https://backup.qurango.net/radio/yasser_aldosari" },
+            { name: "الشيخ سعود الشريم", url: "https://backup.qurango.net/radio/saud_alshuraim" }
         ];
 
         const audio = document.getElementById('main-audio');
         let isPlaying = false;
-        let currentIdx = 0;
 
-        function selectStation(idx) {
-            currentIdx = idx;
-            const s = stations[idx];
-            audio.src = s.url;
-            document.getElementById('current-name').innerText = s.name;
-            document.getElementById('current-reciter').innerText = s.reciter;
-            document.getElementById('mini-name').innerText = s.name;
-            document.getElementById('hero-card').className = `mb-10 rounded-[2.5rem] bg-gradient-to-br ${s.color} p-8 shadow-2xl relative overflow-hidden border border-white/10`;
+        // وضع ليلي افتراضي
+        document.documentElement.classList.add('dark');
+
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            document.getElementById('theme-icon').className = isDark ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-slate-600';
+        }
+
+        function openReadersModal() { document.getElementById('readers-modal').classList.remove('hidden'); }
+        function closeReadersModal() { document.getElementById('readers-modal').classList.add('hidden'); }
+
+        const readersList = document.getElementById('readers-list');
+        readers.forEach(r => {
+            const div = document.createElement('div');
+            div.className = "p-5 bg-white/5 hover:bg-emerald-600 transition-all rounded-2xl border border-white/5 cursor-pointer text-white font-bold flex items-center gap-3 group";
+            div.onclick = () => { selectStation(r.name, r.url); closeReadersModal(); };
+            div.innerHTML = `<i class="fa-solid fa-play opacity-0 group-hover:opacity-100 transition-all"></i> <span>${r.name}</span>`;
+            readersList.appendChild(div);
+        });
+
+        function selectMainStation() {
+            selectStation("الإذاعة العامة", "https://n04.radiojar.com/8s9u67z8n0quv", "بث مباشر من القاهرة");
+        }
+
+        function selectStation(name, url, sub = "المصحف المرتل") {
+            audio.src = url;
+            document.getElementById('current-name').innerText = name;
+            document.getElementById('current-reciter').innerText = sub;
+            document.getElementById('mini-name').innerText = name;
+            document.getElementById('mini-sub').innerText = sub === "بث مباشر من القاهرة" ? "ON AIR" : "قيد التشغيل";
             playAudio();
         }
 
         function togglePlay() { isPlaying ? pauseAudio() : playAudio(); }
-        function playAudio() { if(!audio.src) audio.src = stations[currentIdx].url; audio.play(); isPlaying = true; updateIcons(true); }
+        function playAudio() { if(!audio.src) selectMainStation(); audio.play(); isPlaying = true; updateIcons(true); }
         function pauseAudio() { audio.pause(); isPlaying = false; updateIcons(false); }
+        
         function updateIcons(play) {
             const pi = document.getElementById('play-state-icon');
             const mi = document.getElementById('mini-play-icon');
             pi.innerHTML = play ? '<div class="flex items-end gap-2 h-12"><div class="w-3 bg-white animate-bounce h-full"></div><div class="w-3 bg-white animate-bounce h-2/3" style="animation-delay:0.2s"></div><div class="w-3 bg-white animate-bounce h-full" style="animation-delay:0.4s"></div></div>' : '<i class="fa-solid fa-play ml-2"></i>';
             mi.className = play ? "fa-solid fa-pause text-4xl" : "fa-solid fa-play text-4xl";
         }
+
         function changeVolume(v) { audio.volume = v; }
 
         function updateTime() {
