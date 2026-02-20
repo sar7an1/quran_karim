@@ -14,7 +14,6 @@
         .prayer-row { border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 12px 0; }
         .prayer-row:last-child { border: none; }
         input[type="range"] { accent-color: #10b981; }
-        /* شريط الحقوق الجديد */
         .copyright-bar { background: rgba(15, 23, 42, 0.8); border-top: 1px solid rgba(255,255,255,0.05); padding: 10px 0; margin-bottom: 20px; }
     </style>
 </head>
@@ -62,14 +61,20 @@
         </div>
 
         <div class="bg-[#1e293b]/50 rounded-[2.5rem] p-8 border border-white/5 mb-12 shadow-lg">
-            <h3 class="text-center text-gray-400 font-bold text-xs mb-8 uppercase tracking-widest">مواقيت الصلاة اليوم</h3>
+            <h3 class="text-center text-gray-400 font-bold text-xs mb-2 uppercase tracking-widest">مواقيت الصلاة اليوم</h3>
+            
+            <div class="flex justify-between items-center mb-6 px-2">
+                <span id="gregorian-date" class="text-[11px] font-bold text-emerald-500"></span>
+                <span id="hijri-date" class="text-[11px] font-bold text-amber-500"></span>
+            </div>
+
             <div class="grid grid-cols-3 gap-6 text-center text-white">
-                <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">الفجر</p> <p class="font-black text-emerald-400">05:10</p> </div>
-                <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">الشروق</p> <p class="font-black">06:40</p> </div>
-                <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">الظهر</p> <p class="font-black">12:15</p> </div>
-                <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">العصر</p> <p class="font-black">03:25</p> </div>
-                <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">المغرب</p> <p class="font-black text-orange-400">05:55</p> </div>
-                <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">العشاء</p> <p class="font-black">07:20</p> </div>
+                <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">الفجر</p> <p class="font-black text-emerald-400">05:10 ص</p> </div>
+                <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">الشروق</p> <p class="font-black">06:40 ص</p> </div>
+                <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">الظهر</p> <p class="font-black">12:15 م</p> </div>
+                <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">العصر</p> <p class="font-black">03:25 م</p> </div>
+                <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">المغرب</p> <p class="font-black text-orange-400">05:55 م</p> </div>
+                <div class="prayer-row"> <p class="text-[10px] opacity-60 opacity-60 mb-1">العشاء</p> <p class="font-black">07:20 م</p> </div>
             </div>
         </div>
 
@@ -141,14 +146,15 @@
             { name: "العشاء", time: "19:20" }
         ];
 
-        // تحديث روابط القراء لتعمل مباشرة
         const readers = [
-            { name: "الشيخ ماهر المعيقلي", url: "https://server12.mp3quran.net/maher/128/001.mp3" },
-            { name: "الشيخ عبد الباسط (مجود)", url: "https://server7.mp3quran.net/basit/128/001.mp3" },
-            { name: "الشيخ المنشاوي (مجود)", url: "https://server10.mp3quran.net/minsh/128/001.mp3" },
-            { name: "الشيخ مشاري العفاسي", url: "https://server8.mp3quran.net/afs/128/001.mp3" },
-            { name: "الشيخ محمود الحصري", url: "https://server13.mp3quran.net/hussary/128/001.mp3" },
-            { name: "الشيخ ياسر الدوسري", url: "https://server11.mp3quran.net/yasser/128/001.mp3" }
+            { name: "ماهر المعيقلي", url: "https://backup.qurango.net/radio/maher_al_moaikli" },
+            { name: "عبد الباسط عبد الصمد", url: "https://backup.qurango.net/radio/abdulbasit_abdulsamad_mojawwad" },
+            { name: "محمد صديق المنشاوي", url: "https://backup.qurango.net/radio/mohammed_siddiq_alminshawi_mojawwad" },
+            { name: "مشاري العفاسي", url: "https://backup.qurango.net/radio/mishary_alafasi" },
+            { name: "محمود خليل الحصري", url: "https://backup.qurango.net/radio/mahmoud_khalil_alhussary" },
+            { name: "ياسر الدوسري", url: "https://backup.qurango.net/radio/yasser_aldosari" },
+            { name: "سعود الشريم", url: "https://backup.qurango.net/radio/saud_alshuraim" },
+            { name: "ناصر القطامي", url: "https://backup.qurango.net/radio/nasser_alqatami" }
         ];
 
         const audio = document.getElementById('main-audio');
@@ -156,7 +162,17 @@
 
         function updateClock() {
             const now = new Date();
-            // تحويل AM/PM إلى ص/م مع أرقام إنجليزية
+            
+            // تحديث التاريخ الميلادي ليكون أرقام إنجليزية بالتنسيق المطلوب
+            const day = now.getDate();
+            const month = now.getMonth() + 1;
+            const year = now.getFullYear();
+            document.getElementById('gregorian-date').innerText = `${day}/${month}/${year}`;
+            
+            // تحديث التاريخ الهجري
+            document.getElementById('hijri-date').innerText = "2 رمضان 1447 هـ";
+
+            // نظام 12 ساعة
             let timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
             timeStr = timeStr.replace('AM', 'ص').replace('PM', 'م');
             document.getElementById('live-clock').innerText = timeStr;
@@ -182,6 +198,7 @@
             }
         }
         setInterval(updateClock, 1000);
+        updateClock();
 
         function openReadersModal() { document.getElementById('readers-modal').classList.remove('hidden'); }
         function closeReadersModal() { document.getElementById('readers-modal').classList.add('hidden'); }
@@ -190,27 +207,32 @@
         readers.forEach(r => {
             const div = document.createElement('div');
             div.className = "p-5 bg-white/5 hover:bg-emerald-600 transition-all rounded-2xl border border-white/5 cursor-pointer text-white font-bold";
-            div.onclick = () => { selectStation(r.name, r.url, 'المصحف المرتل'); closeReadersModal(); };
+            div.onclick = () => { selectStation(r.name, r.url, 'بث مباشر'); closeReadersModal(); };
             div.innerText = r.name;
             rList.appendChild(div);
         });
 
         function selectStation(name, url, sub) {
+            audio.pause();
             audio.src = url;
+            audio.load();
             document.getElementById('current-name').innerText = name;
             document.getElementById('current-reciter').innerText = sub;
             document.getElementById('mini-name').innerText = name;
-            document.getElementById('mini-sub').innerText = name === 'الإذاعة العامة' ? 'ON AIR' : 'قيد التشغيل';
+            document.getElementById('mini-sub').innerText = 'قيد التشغيل';
             playAudio();
         }
 
         function togglePlay() { isPlaying ? pauseAudio() : playAudio(); }
+        
         function playAudio() { 
-            if(!audio.src) selectStation('الإذاعة العامة', 'https://backup.qurango.net/radio/ertu_main', 'بث مباشر من القاهرة'); 
-            audio.play().catch(err => console.log("خطأ في التشغيل: ", err));
-            isPlaying = true; 
-            updateIcons(true); 
+            if(!audio.src) selectStation('الإذاعة العامة', 'https://backup.qurango.net/radio/ertu_main', 'بث مباشر من القاهرة');
+            let playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => { isPlaying = true; updateIcons(true); }).catch(e => { isPlaying = false; updateIcons(false); });
+            }
         }
+
         function pauseAudio() { audio.pause(); isPlaying = false; updateIcons(false); }
         
         function updateIcons(play) {
@@ -219,7 +241,8 @@
             pi.innerHTML = play ? '<div class="flex items-end gap-2 h-12"><div class="w-3 bg-white animate-bounce h-full"></div><div class="w-3 bg-white animate-bounce h-2/3" style="animation-delay:0.2s"></div><div class="w-3 bg-white animate-bounce h-full" style="animation-delay:0.4s"></div></div>' : '<i class="fa-solid fa-play ml-2"></i>';
             mi.className = play ? "fa-solid fa-pause text-3xl" : "fa-solid fa-play text-3xl";
         }
+        
         function changeVolume(v) { audio.volume = v; }
     </script>
 </body>
-</html>
+                                                                                                                                  </html>
