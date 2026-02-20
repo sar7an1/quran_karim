@@ -14,6 +14,7 @@
         .grid-item-custom:hover { background: #10b981; border-color: #10b981; transform: translateY(-2px); }
         .prayer-row { border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 10px 0; }
         .dua-box { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 1.5rem; padding: 15px; margin: 20px auto; max-width: 90%; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 15px; height: 15px; background: #10b981; cursor: pointer; border-radius: 50%; }
     </style>
 </head>
 <body>
@@ -36,7 +37,9 @@
         <div class="mb-10 rounded-[2.5rem] bg-gradient-to-br from-emerald-800 to-teal-950 p-8 shadow-2xl relative overflow-hidden border border-white/10">
             <div class="relative z-10 flex flex-col md:flex-row items-center gap-10">
                 <div onclick="togglePlay()" class="w-40 h-40 md:w-52 md:h-52 rounded-full bg-white/10 backdrop-blur-xl border-4 border-white/20 flex items-center justify-center cursor-pointer hover:scale-105 transition-all shadow-inner">
-                    <div id="play-state-icon" class="text-6xl text-white"><i class="fa-solid fa-play ml-2"></i></div>
+                    <div id="play-state-icon" class="text-6xl text-white">
+                        <i class="fa-solid fa-play ml-2"></i>
+                    </div>
                 </div>
                 <div class="text-center md:text-right text-white">
                     <span class="bg-emerald-500/20 px-4 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase border border-white/10" id="live-tag">جاهز للتشغيل</span>
@@ -60,12 +63,18 @@
         </div>
 
         <div class="bg-[#1e293b]/50 rounded-[2.5rem] p-8 border border-white/5 mb-12 shadow-lg">
-            <h3 class="text-center text-gray-400 font-bold text-xs mb-4 uppercase tracking-widest">مواقيت الصلاة والهجري</h3>
+            <h3 class="text-center text-gray-400 font-bold text-xs mb-4 uppercase tracking-widest">مواقيت الصلاة حسب توقيتك المحلي</h3>
             <div class="flex justify-between items-center mb-6 px-2 border-b border-white/5 pb-4">
-                <div class="text-right"><p class="text-[10px] text-gray-400 uppercase font-bold">الميلادي</p><span id="gregorian-date" class="text-sm font-bold text-emerald-500"></span></div>
-                <div class="text-left"><p class="text-[10px] text-gray-400 uppercase font-bold">الهجري</p><span id="hijri-date" class="text-sm font-bold text-amber-500">...</span></div>
+                <div class="text-right">
+                    <p class="text-[10px] text-gray-400 uppercase font-bold">الميلادي</p>
+                    <span id="gregorian-date" class="text-sm font-bold text-emerald-500"></span>
+                </div>
+                <div class="text-left">
+                    <p class="text-[10px] text-gray-400 uppercase font-bold">الهجري</p>
+                    <span id="hijri-date" class="text-sm font-bold text-amber-500">...</span>
+                </div>
             </div>
-            <div class="grid grid-cols-3 gap-6 text-center text-white" id="prayer-grid">
+            <div class="grid grid-cols-3 gap-6 text-center text-white">
                 <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">الفجر</p> <p class="font-black text-emerald-400" id="fajr">-</p> </div>
                 <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">الشروق</p> <p class="font-black" id="sunrise">-</p> </div>
                 <div class="prayer-row"> <p class="text-[10px] opacity-60 mb-1">الظهر</p> <p class="font-black" id="dhuhr">-</p> </div>
@@ -76,13 +85,21 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
-            <div onclick="openReadersModal()" class="p-8 bg-[#1e293b] rounded-[3rem] border-2 border-transparent hover:border-emerald-600 transition-all cursor-pointer shadow-xl"><h4 class="font-black text-xl text-white">المصحف المرتل</h4></div>
-            <div onclick="openRadioModal()" class="p-8 bg-[#1e293b] rounded-[3rem] border-2 border-transparent hover:border-blue-600 transition-all cursor-pointer shadow-xl"><h4 class="font-black text-xl text-white">إذاعات القراء</h4></div>
+            <div onclick="openReadersModal()" class="p-8 bg-[#1e293b] rounded-[3rem] border-2 border-transparent hover:border-emerald-600 transition-all cursor-pointer group shadow-xl">
+                <h4 class="font-black text-xl mb-1 text-white">المصحف المرتل</h4>
+                <p class="text-gray-500 text-sm font-bold">114 سورة لـ 11 قارئ</p>
+            </div>
+            <div onclick="openRadioModal()" class="p-8 bg-[#1e293b] rounded-[3rem] border-2 border-transparent hover:border-blue-600 transition-all cursor-pointer group shadow-xl">
+                <h4 class="font-black text-xl mb-1 text-white">إذاعات القراء والمنوعات</h4>
+                <p class="text-gray-500 text-sm font-bold">20+ إذاعة وبث مباشر</p>
+            </div>
         </div>
 
         <div class="text-center mb-40">
             <p class="font-bold text-sm text-emerald-500 opacity-90 mb-4">sar7an_1 © 2026</p>
-            <div class="dua-box"><p class="text-emerald-400 text-lg font-bold">رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ</p></div>
+            <div class="dua-box">
+                <p class="text-emerald-400 text-lg font-bold">رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ</p>
+            </div>
         </div>
     </main>
 
@@ -95,25 +112,27 @@
             <button onclick="togglePlay()" class="w-20 h-20 bg-emerald-600 text-white rounded-full flex items-center justify-center shadow-2xl -mt-16 border-[6px] border-[#0f172a]">
                 <i id="mini-play-icon" class="fa-solid fa-play text-3xl"></i>
             </button>
-            <div class="flex-1 flex justify-end"><input type="range" min="0" max="1" step="0.1" value="0.8" oninput="audio.volume=this.value" class="w-24 accent-emerald-500"></div>
+            <div class="flex-1 flex justify-end">
+                <input type="range" min="0" max="1" step="0.1" value="0.8" oninput="audio.volume=this.value" class="w-24 accent-emerald-500">
+            </div>
         </div>
     </div>
 
     <div id="readers-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[60] hidden flex items-center justify-center p-4">
-        <div class="bg-[#1e293b] w-full max-w-2xl max-h-[80vh] rounded-[3rem] overflow-hidden flex flex-col">
-            <div class="p-6 border-b border-white/10 flex justify-between text-white"><h3 class="font-black">اختر الشيخ</h3><button onclick="closeModal('readers-modal')">✕</button></div>
+        <div class="bg-[#1e293b] w-full max-w-2xl max-h-[80vh] rounded-[3rem] border border-white/10 overflow-hidden flex flex-col">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center text-white"><h3 class="text-xl font-black">اختر الشيخ</h3><button onclick="closeModal('readers-modal')" class="text-2xl">✕</button></div>
             <div class="p-6 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-4" id="readers-list"></div>
         </div>
     </div>
     <div id="surah-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-[70] hidden flex items-center justify-center p-4">
-        <div class="bg-[#1e293b] w-full max-w-4xl max-h-[85vh] rounded-[3rem] overflow-hidden flex flex-col">
-            <div class="p-6 border-b border-white/10 flex justify-between text-white"><h3 id="surah-title">السور</h3><button onclick="closeModal('surah-modal')">✕</button></div>
-            <div class="p-6 overflow-y-auto grid grid-cols-2 sm:grid-cols-4 gap-2" id="surah-list"></div>
+        <div class="bg-[#1e293b] w-full max-w-4xl max-h-[85vh] rounded-[3rem] border border-white/10 overflow-hidden flex flex-col">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center text-white"><h3 class="text-xl font-black" id="surah-title">السور</h3><button onclick="closeModal('surah-modal')" class="text-2xl">✕</button></div>
+            <div class="p-6 overflow-y-auto grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2" id="surah-list"></div>
         </div>
     </div>
     <div id="radio-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[60] hidden flex items-center justify-center p-4">
-        <div class="bg-[#1e293b] w-full max-w-2xl max-h-[80vh] rounded-[3rem] overflow-hidden flex flex-col">
-            <div class="p-6 border-b border-white/10 flex justify-between text-white"><h3>الإذاعات المباشرة</h3><button onclick="closeModal('radio-modal')">✕</button></div>
+        <div class="bg-[#1e293b] w-full max-w-2xl max-h-[80vh] rounded-[3rem] border border-white/10 overflow-hidden flex flex-col">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center text-white"><h3 class="text-xl font-black">الإذاعات المباشرة</h3><button onclick="closeModal('radio-modal')" class="text-2xl">✕</button></div>
             <div class="p-6 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-4" id="radio-list"></div>
         </div>
     </div>
@@ -128,8 +147,6 @@
             try {
                 const locRes = await fetch('https://ipapi.co/json/');
                 const locData = await locRes.json();
-                
-                // جلب البيانات بدون تعديل خارجي أولاً
                 const prayRes = await fetch(`https://api.aladhan.com/v1/timings?latitude=${locData.latitude}&longitude=${locData.longitude}&method=5`);
                 const prayData = await prayRes.json();
                 pTimes = prayData.data.timings;
@@ -138,14 +155,9 @@
                 const hijri = prayData.data.date.hijri;
                 let day = parseInt(hijri.day);
 
-                // --- معادلة التصحيح الذكي ---
-                // إذا كان الوقت قبل 12 بليل والـ API مدينا يوم زيادة، نرجعه لـ 2
-                // لو النهاردة 20 فبراير (يوم 2 رمضان الفعلي)، هنثبت 2 لحد الساعة 12 بليل
-                if (now.getHours() >= 18 && now.getHours() <= 23) {
-                    day = 2; // تثبيت اليوم على 2 خلال ساعات المساء قبل منتصف الليل
-                } else if (now.getHours() >= 0 && now.getHours() < 4) {
-                    day = 3; // يقلب 3 بعد منتصف الليل
-                }
+                // تصحيح التاريخ: لو قبل الساعة 12 بليل نثبت 2 رمضان
+                if (now.getHours() >= 18 && now.getHours() <= 23) { day = 2; }
+                else if (now.getHours() >= 0 && now.getHours() < 4) { day = 3; }
 
                 document.getElementById('hijri-date').innerText = `${day} ${hijri.month.ar} ${hijri.year}`;
 
@@ -166,7 +178,6 @@
             const now = new Date();
             document.getElementById('gregorian-date').innerText = now.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' });
             document.getElementById('live-clock').innerText = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }).replace('AM', 'ص').replace('PM', 'م');
-            
             if (pTimes.Fajr) {
                 const prayers = [{n:"الفجر",t:pTimes.Fajr},{n:"الظهر",t:pTimes.Dhuhr},{n:"العصر",t:pTimes.Asr},{n:"المغرب",t:pTimes.Maghrib},{n:"العشاء",t:pTimes.Isha}];
                 let nextP = null; let minDiff = Infinity;
@@ -188,24 +199,39 @@
 
         getPrayerTimes(); setInterval(updateClock, 1000);
 
-        // -- القوائم والإذاعات --
         const readersList = [
             { name: "ماهر المعيقلي", server: "https://server12.mp3quran.net/maher/" },
             { name: "مشاري العفاسي", server: "https://server8.mp3quran.net/afs/" },
             { name: "عبد الباسط عبد الصمد", server: "https://server7.mp3quran.net/basit/Mojawwad/" },
             { name: "محمد صديق المنشاوي", server: "https://server10.mp3quran.net/minsh/Mojawwad/" },
+            { name: "محمود خليل الحصري", server: "https://server8.mp3quran.net/hussary/" },
             { name: "ياسر الدوسري", server: "https://server11.mp3quran.net/yasser/" },
-            { name: "إدريس أبكر", server: "https://server6.mp3quran.net/abkr/" },
-            { name: "ناصر القطامي", server: "https://server6.mp3quran.net/qtm/" }
+            { name: "فارس عباد", server: "https://server8.mp3quran.net/frs_a/" },
+            { name: "سعود الشريم", server: "https://server7.mp3quran.net/shur/" },
+            { name: "أحمد العجمي", server: "https://server10.mp3quran.net/ajm/" },
+            { name: "ناصر القطامي", server: "https://server6.mp3quran.net/qtm/" },
+            { name: "إدريس أبكر", server: "https://server6.mp3quran.net/abkr/" }
         ];
 
         const radioStations = [
             { name: "إذاعة القرآن من القاهرة", url: "https://backup.qurango.net/radio/ertu_main" },
+            { name: "أذكار الصباح", url: "https://backup.qurango.net/radio/athkar_sabah" },
+            { name: "أذكار المساء", url: "https://backup.qurango.net/radio/athkar_masa" },
+            { name: "ماهر المعيقلي", url: "https://backup.qurango.net/radio/maher_al_moaikli" },
+            { name: "مشاري العفاسي", url: "https://backup.qurango.net/radio/mishary_alafasi" },
+            { name: "عبد الباسط عبد الصمد", url: "https://backup.qurango.net/radio/abdulsamad_mojawwad" },
+            { name: "محمد صديق المنشاوي", url: "https://backup.qurango.net/radio/mohammad_alminshawi_mojawwad" },
+            { name: "ياسر الدوسري", url: "https://backup.qurango.net/radio/yasser_aldosari" },
             { name: "خالد الجليل", url: "https://backup.qurango.net/radio/khaled_aljaleel" },
+            { name: "ناصر القطامي", url: "https://backup.qurango.net/radio/nasser_alqatami" },
+            { name: "إدريس أبكر", url: "https://backup.qurango.net/radio/idrees_abkar" },
             { name: "سعود الشريم", url: "https://backup.qurango.net/radio/saud_alshuraim" },
+            { name: "فارس عباد", url: "https://backup.qurango.net/radio/fares_abbad" },
             { name: "أحمد العجمي", url: "https://backup.qurango.net/radio/ahmed_alajmi" },
             { name: "الرقية الشرعية", url: "https://backup.qurango.net/radio/roqiah" },
-            { name: "أذكار الصباح والمساء", url: "https://backup.qurango.net/radio/athkar_sabah_masa" }
+            { name: "تفسير القرآن", url: "https://backup.qurango.net/radio/tafseer" },
+            { name: "تلاوات خاشعة", url: "https://backup.qurango.net/radio/salma" },
+            { name: "الإذاعة العامة", url: "https://backup.qurango.net/radio/mix_quran" }
         ];
 
         const surahNames = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
