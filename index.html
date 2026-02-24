@@ -145,37 +145,26 @@
 
         async function getPrayerTimes() {
             try {
-                const locRes = await fetch('https://ipapi.co/json/');
-                const locData = await locRes.json();
-                const prayRes = await fetch(`https://api.aladhan.com/v1/timings?latitude=${locData.latitude}&longitude=${locData.longitude}&method=5`);
-                const prayData = await prayRes.json();
-                pTimes = prayData.data.timings;
-                
-                const now = new Date();
-                const hijri = prayData.data.date.hijri;
-                let day = parseInt(hijri.day);
-
-                async function getPrayerTimes() {
-            try {
-                // جلب البيانات بناءً على مدينة القاهرة لضمان التاريخ الهجري المصري
+                // جلب البيانات بناءً على مدينة القاهرة لضمان التاريخ الهجري المصري الرسمي
                 const prayRes = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5`);
                 const prayData = await prayRes.json();
                 pTimes = prayData.data.timings;
                 
                 const hijri = prayData.data.date.hijri;
 
-                // عرض التاريخ الهجري كما هو في التقويم المصري الرسمي
+                // عرض التاريخ الهجري كما هو مرسل من السيرفر مباشرة بدون أي تعديل يدوي
                 document.getElementById('hijri-date').innerText = `${hijri.day} ${hijri.month.ar} ${hijri.year}`;
 
                 const ids = ['fajr','sunrise','dhuhr','asr','maghrib','isha'];
                 const keys = ['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];
-                ids.forEach((id, i) => document.getElementById(id).innerText = convertTo12h(pTimes[keys[i]]));
-            } catch (e) { console.log(e); }
-                }
-                const ids = ['fajr','sunrise','dhuhr','asr','maghrib','isha'];
-                const keys = ['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];
-                ids.forEach((id, i) => document.getElementById(id).innerText = convertTo12h(pTimes[keys[i]]));
-            } catch (e) { console.log(e); }
+                ids.forEach((id, i) => {
+                    if(document.getElementById(id)) {
+                        document.getElementById(id).innerText = convertTo12h(pTimes[keys[i]]);
+                    }
+                });
+            } catch (e) { 
+                console.log("خطأ في جلب البيانات:", e); 
+            }
         }
 
         function convertTo12h(time) {
